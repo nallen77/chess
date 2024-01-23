@@ -2,6 +2,7 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * Represents a single chess piece
@@ -46,13 +47,69 @@ public class ChessPiece {
     }
 
     /**
-     * Calculates all the positions a chess piece can move to
+     * Calculates all the positions a chess piece can move to.
      * Does not take into account moves that are illegal due to leaving the king in
      * danger
      *
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        return new ArrayList<>();
+
+        return switch (pieceType) {
+            case KING -> kingMoves(board, myPosition);
+            case QUEEN -> queenMoves(board, myPosition);
+            case BISHOP -> bishopMoves(board, myPosition);
+            case KNIGHT -> knightMoves(board, myPosition);
+            case ROOK -> rookMoves(board, myPosition);
+            case PAWN -> pawnMoves(board, myPosition);
+        };
+    }
+
+    private HashSet<ChessMove> kingMoves(ChessBoard board, ChessPosition myPosition) {
+        int currentRow = myPosition.getRow();
+        int currentCol = myPosition.getColumn();
+        HashSet<ChessMove> possibleMoves = new HashSet<>();
+
+        return possibleMoves;
+    }
+
+    private Collection<ChessMove> queenMoves(ChessBoard board, ChessPosition myPosition) {
+        int currentRow = myPosition.getRow();
+        int currentCol = myPosition.getColumn();
+        HashSet<ChessMove> possibleMoves = new HashSet<>();
+
+        return possibleMoves;
+    }
+
+    private Collection<ChessMove> bishopMoves(ChessBoard board, ChessPosition myPosition) {
+        int currentRow = myPosition.getRow();
+        int currentCol = myPosition.getColumn();
+        HashSet<ChessMove> possibleMoves = new HashSet<>();
+
+        return possibleMoves;
+    }
+
+    private Collection<ChessMove> knightMoves(ChessBoard board, ChessPosition myPosition) {
+        int currentRow = myPosition.getRow();
+        int currentCol = myPosition.getColumn();
+        HashSet<ChessMove> possibleMoves = new HashSet<>();
+
+        return possibleMoves;
+    }
+
+    private Collection<ChessMove> rookMoves(ChessBoard board, ChessPosition myPosition) {
+        int currentRow = myPosition.getRow();
+        int currentCol = myPosition.getColumn();
+        HashSet<ChessMove> possibleMoves = new HashSet<>();
+
+        return possibleMoves;
+    }
+
+    private Collection<ChessMove> pawnMoves(ChessBoard board, ChessPosition myPosition) {
+        int currentRow = myPosition.getRow();
+        int currentCol = myPosition.getColumn();
+        HashSet<ChessMove> possibleMoves = new HashSet<>();
+
+        return possibleMoves;
     }
 }
