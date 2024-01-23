@@ -68,14 +68,9 @@ public class ChessPiece {
     private HashSet<ChessMove> kingMoves(ChessBoard board, ChessPosition myPosition) {
         int currentRow = myPosition.getRow();
         int currentCol = myPosition.getColumn();
-        ChessPosition currentPosition = myPosition;
         HashSet<ChessMove> possibleMoves = new HashSet<>();
 
-        // Check valid move range
 
-            // Check if there is a team piece
-
-                // Add to possibleMoves
 
         return possibleMoves;
     }
@@ -83,7 +78,6 @@ public class ChessPiece {
     private Collection<ChessMove> queenMoves(ChessBoard board, ChessPosition myPosition) {
         int currentRow = myPosition.getRow();
         int currentCol = myPosition.getColumn();
-        ChessPosition currentPosition = myPosition;
         HashSet<ChessMove> possibleMoves = new HashSet<>();
 
         return possibleMoves;
@@ -101,19 +95,20 @@ public class ChessPiece {
         // Check board boundary
         while (nextRow < 9 && nextCol > 0) {
             ChessPosition nextPosition = new ChessPosition(nextRow, nextCol);
+            ChessMove nextMove = new ChessMove(myPosition, nextPosition, null);
 
             // Check if there is a piece
             if (board.getPiece(nextPosition) != null) {
 
                 // If enemy piece, add move to take it. Otherwise, there is an ally, so break the loop
                 if (board.getPiece(nextPosition).pieceColor != this.pieceColor) {
-                    possibleMoves.add(new ChessMove(myPosition, nextPosition, null));
+                    possibleMoves.add(nextMove);
                 }
                 break;
             }
             // If no piece, add to possible moves
             else {
-                possibleMoves.add(new ChessMove(myPosition, nextPosition, null));
+                possibleMoves.add(nextMove);
             }
 
             // Proceed up and to the left
@@ -126,19 +121,20 @@ public class ChessPiece {
         nextCol = currentCol + 1;
         while (nextRow < 9 && nextCol < 9) {
             ChessPosition nextPosition = new ChessPosition(nextRow, nextCol);
+            ChessMove nextMove = new ChessMove(myPosition, nextPosition, null);
 
             // Check if there is a piece
             if (board.getPiece(nextPosition) != null) {
 
                 // If enemy piece, add move to take it. Otherwise, there is an ally, so break the loop
                 if (board.getPiece(nextPosition).pieceColor != this.pieceColor) {
-                    possibleMoves.add(new ChessMove(myPosition, nextPosition, null));
+                    possibleMoves.add(nextMove);
                 }
                 break;
             }
             // If no piece, add to possible moves
             else {
-                possibleMoves.add(new ChessMove(myPosition, nextPosition, null));
+                possibleMoves.add(nextMove);
             }
 
             // Proceed up and to the right
@@ -151,19 +147,20 @@ public class ChessPiece {
         nextCol = currentCol + 1;
         while (nextRow > 0 && nextCol < 9) {
             ChessPosition nextPosition = new ChessPosition(nextRow, nextCol);
+            ChessMove nextMove = new ChessMove(myPosition, nextPosition, null);
 
             // Check if there is a piece
             if (board.getPiece(nextPosition) != null) {
 
                 // If enemy piece, add move to take it. Otherwise, there is an ally, so break the loop
                 if (board.getPiece(nextPosition).pieceColor != this.pieceColor) {
-                    possibleMoves.add(new ChessMove(myPosition, nextPosition, null));
+                    possibleMoves.add(nextMove);
                 }
                 break;
             }
             // If no piece, add to possible moves
             else {
-                possibleMoves.add(new ChessMove(myPosition, nextPosition, null));
+                possibleMoves.add(nextMove);
             }
 
             // Proceed down and to the right
@@ -176,19 +173,20 @@ public class ChessPiece {
         nextCol = currentCol - 1;
         while (nextRow > 0 && nextCol > 0) {
             ChessPosition nextPosition = new ChessPosition(nextRow, nextCol);
+            ChessMove nextMove = new ChessMove(myPosition, nextPosition, null);
 
             // Check if there is a piece
             if (board.getPiece(nextPosition) != null) {
 
                 // If enemy piece, add move to take it. Otherwise, there is an ally, so break the loop
                 if (board.getPiece(nextPosition).pieceColor != this.pieceColor) {
-                    possibleMoves.add(new ChessMove(myPosition, nextPosition, null));
+                    possibleMoves.add(nextMove);
                 }
                 break;
             }
             // If no piece, add to possible moves
             else {
-                possibleMoves.add(new ChessMove(myPosition, nextPosition, null));
+                possibleMoves.add(nextMove);
             }
 
             // Proceed down and to the left
@@ -202,7 +200,6 @@ public class ChessPiece {
     private Collection<ChessMove> knightMoves(ChessBoard board, ChessPosition myPosition) {
         int currentRow = myPosition.getRow();
         int currentCol = myPosition.getColumn();
-        ChessPosition currentPosition = myPosition;
         HashSet<ChessMove> possibleMoves = new HashSet<>();
 
         return possibleMoves;
@@ -211,8 +208,113 @@ public class ChessPiece {
     private Collection<ChessMove> rookMoves(ChessBoard board, ChessPosition myPosition) {
         int currentRow = myPosition.getRow();
         int currentCol = myPosition.getColumn();
-        ChessPosition currentPosition = myPosition;
         HashSet<ChessMove> possibleMoves = new HashSet<>();
+
+        // Up
+        int nextRow = currentRow + 1;
+
+        // Check board boundary
+        while (nextRow < 9) {
+            ChessPosition nextPosition = new ChessPosition(nextRow, currentCol);
+            ChessMove nextMove = new ChessMove(myPosition, nextPosition, null);
+
+            // Check if there is a piece
+            if (board.getPiece(nextPosition) != null) {
+
+                // If enemy piece, add move to take it. Otherwise, there is an ally, so break the loop
+                if (board.getPiece(nextPosition).pieceColor != this.pieceColor) {
+                    possibleMoves.add(nextMove);
+                }
+                break;
+            }
+            // If no piece, add to possible moves
+            else {
+                possibleMoves.add(nextMove);
+            }
+
+            // Proceed up
+            nextRow++;
+        }
+
+        // Right
+        int nextCol = currentCol + 1;
+
+        // Check board boundary
+        while (nextCol < 9) {
+            ChessPosition nextPosition = new ChessPosition(currentRow, nextCol);
+            ChessMove nextMove = new ChessMove(myPosition, nextPosition, null);
+
+            // Check if there is a piece
+            if (board.getPiece(nextPosition) != null) {
+
+                // If enemy piece, add move to take it. Otherwise, there is an ally, so break the loop
+                if (board.getPiece(nextPosition).pieceColor != this.pieceColor) {
+                    possibleMoves.add(nextMove);
+                }
+                break;
+            }
+            // If no piece, add to possible moves
+            else {
+                possibleMoves.add(nextMove);
+            }
+
+            // Proceed right
+            nextCol++;
+        }
+
+        // Down
+        nextRow = currentRow - 1;
+
+        // Check board boundary
+        while (nextRow > 0) {
+            ChessPosition nextPosition = new ChessPosition(nextRow, currentCol);
+            ChessMove nextMove = new ChessMove(myPosition, nextPosition, null);
+
+            // Check if there is a piece
+            if (board.getPiece(nextPosition) != null) {
+
+                // If enemy piece, add move to take it. Otherwise, there is an ally, so break the loop
+                if (board.getPiece(nextPosition).pieceColor != this.pieceColor) {
+                    possibleMoves.add(nextMove);
+                }
+                break;
+            }
+            // If no piece, add to possible moves
+            else {
+                possibleMoves.add(nextMove);
+            }
+
+            // Proceed down
+            nextRow--;
+        }
+
+        // Left
+        nextCol = currentCol - 1;
+
+        // Check board boundary
+        while (nextCol > 0) {
+            ChessPosition nextPosition = new ChessPosition(currentRow, nextCol);
+            ChessMove nextMove = new ChessMove(myPosition, nextPosition, null);
+
+            // Check if there is a piece
+            if (board.getPiece(nextPosition) != null) {
+
+                // If enemy piece, add move to take it. Otherwise, there is an ally, so break the loop
+                if (board.getPiece(nextPosition).pieceColor != this.pieceColor) {
+                    possibleMoves.add(nextMove);
+                }
+                break;
+            }
+            // If no piece, add to possible moves
+            else {
+                possibleMoves.add(nextMove);
+            }
+
+            // Proceed left
+            nextCol--;
+        }
+
+
 
         return possibleMoves;
     }
@@ -220,7 +322,6 @@ public class ChessPiece {
     private Collection<ChessMove> pawnMoves(ChessBoard board, ChessPosition myPosition) {
         int currentRow = myPosition.getRow();
         int currentCol = myPosition.getColumn();
-        ChessPosition currentPosition = myPosition;
         HashSet<ChessMove> possibleMoves = new HashSet<>();
 
         return possibleMoves;
