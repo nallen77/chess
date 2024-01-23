@@ -8,10 +8,10 @@ package chess;
  */
 public class ChessBoard {
 
-    private ChessPiece[][] squares = new ChessPiece[8][8];
+    private ChessPiece[][] chessPieces;
 
     public ChessBoard() {
-
+        chessPieces = new ChessPiece[8][8];
     }
 
     /**
@@ -22,8 +22,8 @@ public class ChessBoard {
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
 
-        // Subtract one from the position to fit array indices
-        squares[position.getRow() - 1][position.getColumn() - 1] = piece;
+        // Subtract one from the position to match array indices
+        chessPieces[position.getRow() - 1][position.getColumn() - 1] = piece;
     }
 
     /**
@@ -35,8 +35,8 @@ public class ChessBoard {
      */
     public ChessPiece getPiece(ChessPosition position) {
 
-        // Subtract one from the position to fit array indices
-        return squares[position.getRow() - 1][position.getColumn() - 1];
+        // Subtract one from the position to match array indices
+        return chessPieces[position.getRow() - 1][position.getColumn() - 1];
     }
 
     /**
@@ -45,7 +45,7 @@ public class ChessBoard {
      */
     public void resetBoard() {
 
-        // Place each piece to its corresponding starting position //
+        // Place each piece in its corresponding starting position //
 
         // White Pieces
 
