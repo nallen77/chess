@@ -66,6 +66,7 @@ public class ChessPiece {
         };
     }
 
+    // Comment just to commit this code that did pass all phase 0 tests
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
