@@ -47,7 +47,7 @@ public class ChessBoard {
      */
     public void resetBoard() {
 
-        // Add each piece in its corresponding starting position //
+        // Add each piece in its corresponding starting position
 
         // White Pieces
         for (int i = 1; i < 9; i++) {
