@@ -50,7 +50,22 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        throw new RuntimeException("Not implemented");
+        HashSet<ChessMove> validMoves = new HashSet<>();
+        ChessPiece pieceToMove = board.getPiece(startPosition);
+        HashSet<ChessMove> possibleMoves = (HashSet<ChessMove>) pieceToMove.pieceMoves(board, startPosition);
+
+        // Check each possible move to ensure it does not endanger the king
+        for (ChessMove move : possibleMoves) {
+            ChessGame nextBoardState = new ChessGame();
+            nextBoardState.setBoard(board);
+            nextBoardState.board.addPiece(move.getEndPosition(), pieceToMove);
+            nextBoardState.board.addPiece(move.getStartPosition(), null);
+            if (!nextBoardState.isInCheck(pieceToMove.getTeamColor())) {
+                validMoves.add(move);
+            }
+        }
+
+        return validMoves;
     }
 
     /**
@@ -60,7 +75,30 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        throw new RuntimeException("Not implemented");
+        ChessPiece pieceToMove = board.getPiece(move.getStartPosition());
+
+        // Check for valid move and make it
+        HashSet<ChessMove> validMoves = (HashSet<ChessMove>) validMoves(move.getStartPosition());
+        for (ChessMove validMove : validMoves) {
+            if (move.equals(validMove)) {
+
+                // Move the piece, checking if it is a pawn in the promotion area
+                if (move.getPromotionPiece() != null) {
+                    ChessPiece promotedPiece  = new ChessPiece(teamTurn, move.getPromotionPiece());
+                    board.addPiece(move.getEndPosition(), promotedPiece);
+                }
+                else {
+                    board.addPiece(move.getEndPosition(), new ChessPiece(teamTurn, pieceToMove.getPieceType()));
+                }
+
+                // Remove the piece from the last position by setting to null
+                board.addPiece(move.getStartPosition(), null);
+
+                break;
+            }
+        }
+
+        throw new InvalidMoveException();
     }
 
     /**
@@ -72,20 +110,22 @@ public class ChessGame {
     public boolean isInCheck(TeamColor teamColor) {
 
         // Check each tile on the board for the possible moves of opponent pieces
-        for (int row = 1; row < 9; row++) {
-            for (int col = 1; col < 9; col++) {
+        for (int row = 1; row <= 8; row++) {
+            for (int col = 1; col <= 8; col++) {
                 ChessPosition currentPosition = new ChessPosition(row, col);
-                ChessPiece currentPiece = board.getPiece(currentPosition);
+//                ChessPiece currentPiece = board.getPiece(currentPosition);
                 // If there isn't a piece, or the piece is the current team, continue to the next tile
-                if ((currentPiece == null) || (currentPiece.getTeamColor() == teamColor)) {
-                    continue;
-                }
-                // Calculate all possible moves for an opponent piece
-                HashSet<ChessMove> possibleMoves = (HashSet<ChessMove>) currentPiece.pieceMoves(board, currentPosition);
-                for (ChessMove move : possibleMoves) {
-                    // If any of its moves ends at the King, then current team is in check
-                    if (board.getPiece(move.getEndPosition()).equals(new ChessPiece(teamColor, ChessPiece.PieceType.KING))) {
-                        return true;
+                if ((board.getPiece(currentPosition) != null) && (board.getPiece(currentPosition).getTeamColor() != teamColor)) {
+
+                    // Calculate all possible moves for an opponent piece
+                    HashSet<ChessMove> possibleMoves = (HashSet<ChessMove>) board.getPiece(currentPosition).pieceMoves(board, currentPosition);
+                    for (ChessMove move : possibleMoves) {
+                        // If any of its moves ends at the King, then current team is in check
+                        if (board.getPiece(move.getEndPosition()) != null) {
+                                if (board.getPiece(move.getEndPosition()).equals(new ChessPiece(teamTurn, ChessPiece.PieceType.KING))) {
+                                return true;
+                            }
+                        }
                     }
                 }
             }
