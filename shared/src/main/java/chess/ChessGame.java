@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -11,7 +12,7 @@ import java.util.Collection;
 public class ChessGame {
 
     private ChessGame.TeamColor teamTurn;
-    private ChessBoard board;
+    private ChessBoard board = new ChessBoard();
 
     public ChessGame() {
         teamTurn = TeamColor.WHITE;
@@ -69,7 +70,27 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+
+        // Check each tile on the board for the possible moves of opponent pieces
+        for (int row = 1; row < 9; row++) {
+            for (int col = 1; col < 9; col++) {
+                ChessPosition currentPosition = new ChessPosition(row, col);
+                ChessPiece currentPiece = board.getPiece(currentPosition);
+                // If there isn't a piece, or the piece is the current team, continue to the next tile
+                if ((currentPiece == null) || (currentPiece.getTeamColor() == teamColor)) {
+                    continue;
+                }
+                // Calculate all possible moves for an opponent piece
+                HashSet<ChessMove> possibleMoves = (HashSet<ChessMove>) currentPiece.pieceMoves(board, currentPosition);
+                for (ChessMove move : possibleMoves) {
+                    // If any of its moves ends at the King, then current team is in check
+                    if (board.getPiece(move.getEndPosition()).equals(new ChessPiece(teamColor, ChessPiece.PieceType.KING))) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -79,7 +100,9 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+
+        // As mentioned in class, these conditions are effectively what determines a checkmate
+        return isInCheck(teamColor) && isInStalemate(teamColor);
     }
 
     /**
