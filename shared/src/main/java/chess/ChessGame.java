@@ -79,7 +79,7 @@ public class ChessGame {
         // Check each possible move to ensure it does not endanger the king
         for (ChessMove move : possibleMoves) {
             ChessGame nextBoardState = new ChessGame();
-            nextBoardState.setBoard(board);
+            nextBoardState.copyBoard(board);
             nextBoardState.board.addPiece(move.getEndPosition(), pieceToMove);
             nextBoardState.board.addPiece(move.getStartPosition(), null);
             if (!nextBoardState.isInCheck(pieceToMove.getTeamColor())) {
@@ -162,7 +162,7 @@ public class ChessGame {
                     for (ChessMove move : possibleMoves) {
                         // If any of its moves ends at the King, then current team is in check
                         if (board.getPiece(move.getEndPosition()) != null) {
-                                if (board.getPiece(move.getEndPosition()).equals(new ChessPiece(teamTurn, ChessPiece.PieceType.KING))) {
+                                if (board.getPiece(move.getEndPosition()).equals(new ChessPiece(teamColor, ChessPiece.PieceType.KING))) {
                                 return true;
                             }
                         }
@@ -229,5 +229,24 @@ public class ChessGame {
      */
     public ChessBoard getBoard() {
         return board;
+    }
+
+    /**
+     * This function copies the current board into a new object
+     * @param currentBoard
+     */
+    public void copyBoard(ChessBoard currentBoard) {
+
+        for (int row = 1; row < 9; row++) {
+            for (int col = 1; col < 9; col++) {
+                ChessPosition currentPosition = new ChessPosition(row, col);
+                if (currentBoard.getPiece(currentPosition) != null) {
+                    this.board.addPiece(currentPosition, currentBoard.getPiece(currentPosition));
+                }
+                else {
+                    this.board.addPiece(currentPosition, null);
+                }
+            }
+        }
     }
 }
