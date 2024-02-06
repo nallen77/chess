@@ -2,6 +2,7 @@ package chess;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -16,6 +17,27 @@ public class ChessGame {
 
     public ChessGame() {
         teamTurn = TeamColor.WHITE;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessGame chessGame = (ChessGame) o;
+        return teamTurn == chessGame.teamTurn && Objects.deepEquals(board, chessGame.board);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(teamTurn, board);
+    }
+
+    @Override
+    public String toString() {
+        return "ChessGame{" +
+                "teamTurn=" + teamTurn +
+                ", board=" + board +
+                '}';
     }
 
     /**
@@ -83,8 +105,11 @@ public class ChessGame {
 
         // Check for valid move and make it
         HashSet<ChessMove> validMoves = (HashSet<ChessMove>) validMoves(move.getStartPosition());
+        boolean valid = false;
         for (ChessMove validMove : validMoves) {
             if (move.equals(validMove)) {
+
+                valid = true;
 
                 // Move the piece, checking if it is a pawn in the promotion area
                 if (move.getPromotionPiece() != null) {
@@ -110,7 +135,10 @@ public class ChessGame {
             }
         }
 
-        throw new InvalidMoveException();
+        if (!valid) {
+            throw new InvalidMoveException();
+        }
+
     }
 
     /**
