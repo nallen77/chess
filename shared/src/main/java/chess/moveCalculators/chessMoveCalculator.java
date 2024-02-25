@@ -9,7 +9,6 @@ import java.util.HashSet;
 
 public class chessMoveCalculator {
 
-
     /**
      * @param board the current board state of the game
      * @param nextPosition the position being checked for an enemy piece
@@ -24,6 +23,13 @@ public class chessMoveCalculator {
 
     }
 
+    /**
+     * @param board the current board state of the game
+     * @param possibleMoves the list of possible moves to be updated
+     * @param pieceColor the current piece's color
+     * @param nextPosition the position being checked to add
+     * @param nextMove the move to be added or not
+     */
     public static void addPossibleMove(ChessBoard board, HashSet<ChessMove> possibleMoves, ChessGame.TeamColor pieceColor, ChessPosition nextPosition, ChessMove nextMove) {
 
         // Check if there is an enemy piece, then add to possible moves
