@@ -153,7 +153,6 @@ public class ChessGame {
         for (int row = 1; row < 9; row++) {
             for (int col = 1; col < 9; col++) {
                 ChessPosition currentPosition = new ChessPosition(row, col);
-//                ChessPiece currentPiece = board.getPiece(currentPosition);
                 // If there isn't a piece, or the piece is the current team, continue to the next tile
                 if ((board.getPiece(currentPosition) != null) && (board.getPiece(currentPosition).getTeamColor() != teamColor)) {
 
@@ -232,8 +231,8 @@ public class ChessGame {
     }
 
     /**
-     * This function copies the current board into a new object
-     * @param currentBoard
+     * This function copies the current board into a new object for checking valid moves
+     * @param currentBoard the current game's board state to be copied
      */
     public void copyBoard(ChessBoard currentBoard) {
 

@@ -1,6 +1,7 @@
 package chess;
 
-import java.util.ArrayList;
+import chess.moveCalculators.kingMoveCalculator;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
@@ -57,7 +58,7 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
 
         return switch (pieceType) {
-            case KING -> kingMoves(board, myPosition);
+            case KING -> kingMoveCalculator.kingMoves(board, myPosition, this.pieceColor);
             case QUEEN -> queenMoves(board, myPosition);
             case BISHOP -> bishopMoves(board, myPosition);
             case KNIGHT -> knightMoves(board, myPosition);
@@ -86,194 +87,6 @@ public class ChessPiece {
                 "pieceColor=" + pieceColor +
                 ", pieceType=" + pieceType +
                 '}';
-    }
-
-    private HashSet<ChessMove> kingMoves(ChessBoard board, ChessPosition myPosition) {
-        int currentRow = myPosition.getRow();
-        int currentCol = myPosition.getColumn();
-        HashSet<ChessMove> possibleMoves = new HashSet<>();
-
-        // Up
-        int nextRow = currentRow + 1;
-
-        // Check board boundary
-        if (nextRow < 9) {
-            ChessPosition nextPosition = new ChessPosition(nextRow, currentCol);
-            ChessMove nextMove = new ChessMove(myPosition, nextPosition, null);
-
-            // Check if there is a piece
-            if (board.getPiece(nextPosition) != null) {
-
-                // If enemy piece, add move to take it. Otherwise, there is an ally so don't add move
-                if (board.getPiece(nextPosition).pieceColor != this.pieceColor) {
-                    possibleMoves.add(nextMove);
-                }
-            }
-            // If no piece, add to possible moves
-            else {
-                possibleMoves.add(nextMove);
-            }
-        }
-
-        // Up Right
-        nextRow = currentRow + 1;
-        int nextCol = currentCol + 1;
-
-        // Check board boundary
-        if (nextRow < 9 && nextCol < 9) {
-            ChessPosition nextPosition = new ChessPosition(nextRow, nextCol);
-            ChessMove nextMove = new ChessMove(myPosition, nextPosition, null);
-
-            // Check if there is a piece
-            if (board.getPiece(nextPosition) != null) {
-
-                // If enemy piece, add move to take it. Otherwise, there is an ally so don't add move
-                if (board.getPiece(nextPosition).pieceColor != this.pieceColor) {
-                    possibleMoves.add(nextMove);
-                }
-            }
-            // If no piece, add to possible moves
-            else {
-                possibleMoves.add(nextMove);
-            }
-        }
-
-        // Right
-        nextCol = currentCol + 1;
-
-        // Check board boundary
-        if (nextCol < 9) {
-            ChessPosition nextPosition = new ChessPosition(currentRow, nextCol);
-            ChessMove nextMove = new ChessMove(myPosition, nextPosition, null);
-
-            // Check if there is a piece
-            if (board.getPiece(nextPosition) != null) {
-
-                // If enemy piece, add move to take it. Otherwise, there is an ally so don't add move
-                if (board.getPiece(nextPosition).pieceColor != this.pieceColor) {
-                    possibleMoves.add(nextMove);
-                }
-            }
-            // If no piece, add to possible moves
-            else {
-                possibleMoves.add(nextMove);
-            }
-        }
-
-        // Down Right
-        nextRow = currentRow - 1;
-        nextCol = currentCol + 1;
-
-        // Check board boundary
-        if (nextRow > 0 && nextCol < 9) {
-            ChessPosition nextPosition = new ChessPosition(nextRow, nextCol);
-            ChessMove nextMove = new ChessMove(myPosition, nextPosition, null);
-
-            // Check if there is a piece
-            if (board.getPiece(nextPosition) != null) {
-
-                // If enemy piece, add move to take it. Otherwise, there is an ally so don't add move
-                if (board.getPiece(nextPosition).pieceColor != this.pieceColor) {
-                    possibleMoves.add(nextMove);
-                }
-            }
-            // If no piece, add to possible moves
-            else {
-                possibleMoves.add(nextMove);
-            }
-        }
-
-        // Down
-        nextRow = currentRow - 1;
-
-        // Check board boundary
-        if (nextRow > 0) {
-            ChessPosition nextPosition = new ChessPosition(nextRow, currentCol);
-            ChessMove nextMove = new ChessMove(myPosition, nextPosition, null);
-
-            // Check if there is a piece
-            if (board.getPiece(nextPosition) != null) {
-
-                // If enemy piece, add move to take it. Otherwise, there is an ally so don't add move
-                if (board.getPiece(nextPosition).pieceColor != this.pieceColor) {
-                    possibleMoves.add(nextMove);
-                }
-            }
-            // If no piece, add to possible moves
-            else {
-                possibleMoves.add(nextMove);
-            }
-        }
-
-        // Down Left
-        nextRow = currentRow - 1;
-        nextCol = currentCol - 1;
-
-        // Check board boundary
-        if (nextRow > 0 && nextCol > 0) {
-            ChessPosition nextPosition = new ChessPosition(nextRow, nextCol);
-            ChessMove nextMove = new ChessMove(myPosition, nextPosition, null);
-
-            // Check if there is a piece
-            if (board.getPiece(nextPosition) != null) {
-
-                // If enemy piece, add move to take it. Otherwise, there is an ally so don't add move
-                if (board.getPiece(nextPosition).pieceColor != this.pieceColor) {
-                    possibleMoves.add(nextMove);
-                }
-            }
-            // If no piece, add to possible moves
-            else {
-                possibleMoves.add(nextMove);
-            }
-        }
-
-        // Left
-        nextCol = currentCol - 1;
-
-        // Check board boundary
-        if (nextCol > 0) {
-            ChessPosition nextPosition = new ChessPosition(currentRow, nextCol);
-            ChessMove nextMove = new ChessMove(myPosition, nextPosition, null);
-
-            // Check if there is a piece
-            if (board.getPiece(nextPosition) != null) {
-
-                // If enemy piece, add move to take it. Otherwise, there is an ally so don't add move
-                if (board.getPiece(nextPosition).pieceColor != this.pieceColor) {
-                    possibleMoves.add(nextMove);
-                }
-            }
-            // If no piece, add to possible moves
-            else {
-                possibleMoves.add(nextMove);
-            }
-        }
-
-        // Up Left
-        nextRow = currentRow + 1;
-        nextCol = currentCol - 1;
-
-        // Check board boundary
-        if (nextRow < 9 && nextCol > 0) {
-            ChessPosition nextPosition = new ChessPosition(nextRow, nextCol);
-            ChessMove nextMove = new ChessMove(myPosition, nextPosition, null);
-
-            // Check if there is a piece
-            if (board.getPiece(nextPosition) != null) {
-
-                // If enemy piece, add move to take it. Otherwise, there is an ally so don't add move
-                if (board.getPiece(nextPosition).pieceColor != this.pieceColor) {
-                    possibleMoves.add(nextMove);
-                }
-            }
-            // If no piece, add to possible moves
-            else {
-                possibleMoves.add(nextMove);
-            }
-        }
-
-        return possibleMoves;
     }
 
     private Collection<ChessMove> queenMoves(ChessBoard board, ChessPosition myPosition) {
@@ -920,79 +733,14 @@ public class ChessPiece {
         int currentCol = myPosition.getColumn();
         HashSet<ChessMove> possibleMoves = new HashSet<>();
 
-        // White move forward
-        if (this.pieceColor == ChessGame.TeamColor.WHITE) {
-            int nextRow = currentRow + 1;
-            int nextColLeft = currentCol - 1;
-            int nextColRight = currentCol + 1;
-            int doubleMove = currentRow + 2;
-            ChessPosition forwardPosition = new ChessPosition(nextRow, currentCol);
-            ChessPosition doubleForward = new ChessPosition(doubleMove, currentCol);
-            ChessPosition forwardLeft = new ChessPosition(nextRow, nextColLeft);
-            ChessPosition forwardRight = new ChessPosition(nextRow, nextColRight);
+        whitePawnMoves(board, myPosition, currentRow, currentCol, possibleMoves);
 
-            // Check board boundary
-            if (nextRow < 9) {
+        blackPawnMoves(board, myPosition, currentRow, currentCol, possibleMoves);
 
-                // Forward
-                if (board.getPiece(forwardPosition) == null) {
+        return possibleMoves;
+    }
 
-                    // Check promotion row in front
-                    if (nextRow == 8) {
-                        possibleMoves.add(new ChessMove(myPosition, forwardPosition, PieceType.QUEEN));
-                        possibleMoves.add(new ChessMove(myPosition, forwardPosition, PieceType.BISHOP));
-                        possibleMoves.add(new ChessMove(myPosition, forwardPosition, PieceType.KNIGHT));
-                        possibleMoves.add(new ChessMove(myPosition, forwardPosition, PieceType.ROOK));
-                    }
-                    // Otherwise, check if in starting position and no pieces in front
-                    else if (currentRow == 2 && board.getPiece(doubleForward) == null) {
-                        possibleMoves.add(new ChessMove(myPosition, forwardPosition, null));
-                        possibleMoves.add(new ChessMove(myPosition, doubleForward, null));
-                    }
-
-                    // Otherwise, add front move
-                    else {
-                        possibleMoves.add(new ChessMove(myPosition, forwardPosition, null));
-                    }
-                }
-
-                if (nextColLeft > 1) {
-                    // Forward left
-                    if (board.getPiece(forwardLeft) != null) {
-                        // Check promotion row front left
-                        if (board.getPiece(forwardLeft).pieceColor != this.pieceColor && nextRow == 8) {
-                            possibleMoves.add(new ChessMove(myPosition, forwardLeft, PieceType.QUEEN));
-                            possibleMoves.add(new ChessMove(myPosition, forwardLeft, PieceType.BISHOP));
-                            possibleMoves.add(new ChessMove(myPosition, forwardLeft, PieceType.KNIGHT));
-                            possibleMoves.add(new ChessMove(myPosition, forwardLeft, PieceType.ROOK));
-                        }
-                        // Check forward left for enemy piece
-                        else if (board.getPiece(forwardLeft).pieceColor != this.pieceColor) {
-                            possibleMoves.add(new ChessMove(myPosition, forwardLeft, null));
-                        }
-                    }
-                }
-
-                if (nextColRight < 9) {
-                    // Forward right
-                    if (board.getPiece(forwardRight) != null) {
-                        // Check promotion row front right
-                        if (board.getPiece(forwardRight).pieceColor != this.pieceColor && nextRow == 8) {
-                            possibleMoves.add(new ChessMove(myPosition, forwardRight, PieceType.QUEEN));
-                            possibleMoves.add(new ChessMove(myPosition, forwardRight, PieceType.BISHOP));
-                            possibleMoves.add(new ChessMove(myPosition, forwardRight, PieceType.KNIGHT));
-                            possibleMoves.add(new ChessMove(myPosition, forwardRight, PieceType.ROOK));
-                        }
-                        // Check forward right for enemy piece
-                        else if (board.getPiece(forwardRight).pieceColor != this.pieceColor) {
-                            possibleMoves.add(new ChessMove(myPosition, forwardRight, null));
-                        }
-                    }
-                }
-
-            }
-        }
-
+    private void blackPawnMoves(ChessBoard board, ChessPosition myPosition, int currentRow, int currentCol, HashSet<ChessMove> possibleMoves) {
         // Black move forward
         if (this.pieceColor == ChessGame.TeamColor.BLACK) {
             int nextRow = currentRow - 1;
@@ -1046,7 +794,7 @@ public class ChessPiece {
                     }
                 }
 
-                if (nextColRight > 1) {
+                if (nextColRight >= 1) {
                     // Forward right
                     if (board.getPiece(forwardRight) != null) {
                         // Check promotion row front right
@@ -1064,7 +812,80 @@ public class ChessPiece {
                 }
             }
         }
+    }
 
-        return possibleMoves;
+    private void whitePawnMoves(ChessBoard board, ChessPosition myPosition, int currentRow, int currentCol, HashSet<ChessMove> possibleMoves) {
+        // White move forward
+        if (this.pieceColor == ChessGame.TeamColor.WHITE) {
+            int nextRow = currentRow + 1;
+            int nextColLeft = currentCol - 1;
+            int nextColRight = currentCol + 1;
+            int doubleMove = currentRow + 2;
+            ChessPosition forwardPosition = new ChessPosition(nextRow, currentCol);
+            ChessPosition doubleForward = new ChessPosition(doubleMove, currentCol);
+            ChessPosition forwardLeft = new ChessPosition(nextRow, nextColLeft);
+            ChessPosition forwardRight = new ChessPosition(nextRow, nextColRight);
+
+            // Check board boundary
+            if (nextRow < 9) {
+
+                // Forward
+                if (board.getPiece(forwardPosition) == null) {
+
+                    // Check promotion row in front
+                    if (nextRow == 8) {
+                        possibleMoves.add(new ChessMove(myPosition, forwardPosition, PieceType.QUEEN));
+                        possibleMoves.add(new ChessMove(myPosition, forwardPosition, PieceType.BISHOP));
+                        possibleMoves.add(new ChessMove(myPosition, forwardPosition, PieceType.KNIGHT));
+                        possibleMoves.add(new ChessMove(myPosition, forwardPosition, PieceType.ROOK));
+                    }
+                    // Otherwise, check if in starting position and no pieces in front
+                    else if (currentRow == 2 && board.getPiece(doubleForward) == null) {
+                        possibleMoves.add(new ChessMove(myPosition, forwardPosition, null));
+                        possibleMoves.add(new ChessMove(myPosition, doubleForward, null));
+                    }
+
+                    // Otherwise, add front move
+                    else {
+                        possibleMoves.add(new ChessMove(myPosition, forwardPosition, null));
+                    }
+                }
+
+                if (nextColLeft >= 1) {
+                    // Forward left
+                    if (board.getPiece(forwardLeft) != null) {
+                        // Check promotion row front left
+                        if (board.getPiece(forwardLeft).pieceColor != this.pieceColor && nextRow == 8) {
+                            possibleMoves.add(new ChessMove(myPosition, forwardLeft, PieceType.QUEEN));
+                            possibleMoves.add(new ChessMove(myPosition, forwardLeft, PieceType.BISHOP));
+                            possibleMoves.add(new ChessMove(myPosition, forwardLeft, PieceType.KNIGHT));
+                            possibleMoves.add(new ChessMove(myPosition, forwardLeft, PieceType.ROOK));
+                        }
+                        // Check forward left for enemy piece
+                        else if (board.getPiece(forwardLeft).pieceColor != this.pieceColor) {
+                            possibleMoves.add(new ChessMove(myPosition, forwardLeft, null));
+                        }
+                    }
+                }
+
+                if (nextColRight < 9) {
+                    // Forward right
+                    if (board.getPiece(forwardRight) != null) {
+                        // Check promotion row front right
+                        if (board.getPiece(forwardRight).pieceColor != this.pieceColor && nextRow == 8) {
+                            possibleMoves.add(new ChessMove(myPosition, forwardRight, PieceType.QUEEN));
+                            possibleMoves.add(new ChessMove(myPosition, forwardRight, PieceType.BISHOP));
+                            possibleMoves.add(new ChessMove(myPosition, forwardRight, PieceType.KNIGHT));
+                            possibleMoves.add(new ChessMove(myPosition, forwardRight, PieceType.ROOK));
+                        }
+                        // Check forward right for enemy piece
+                        else if (board.getPiece(forwardRight).pieceColor != this.pieceColor) {
+                            possibleMoves.add(new ChessMove(myPosition, forwardRight, null));
+                        }
+                    }
+                }
+
+            }
+        }
     }
 }
