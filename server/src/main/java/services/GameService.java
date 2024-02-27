@@ -1,6 +1,8 @@
 package services;
 
 import dataAccess.GameDAO;
+import requests.RegisterRequest;
+import response.RegisterResponse;
 
 public class GameService {
 
@@ -14,4 +16,6 @@ public class GameService {
     public void clear() {
         gameDAO.clear();
     }
+
+
 }

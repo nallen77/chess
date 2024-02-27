@@ -1,10 +1,14 @@
 package dataAccess;
 
+import model.UserData;
+
 public interface UserDAO {
 
-    public void createUser();
+    public void createUser(UserData user);
 
-    public void readUser();
+    public boolean isUserInList(String username);
+
+    public UserData retrieveUser(String username);
 
     public void updateUser();
 

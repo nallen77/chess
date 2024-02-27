@@ -15,13 +15,28 @@ public class MemoryUserDAO implements UserDAO{
     }
 
     @Override
-    public void createUser() {
-
+    public void createUser(UserData user) {
+        userData.add(user);
     }
 
     @Override
-    public void readUser() {
+    public boolean isUserInList(String username) {
+        for (UserData user : userData) {
+            if (user.getUsername().equals(username)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
+    @Override
+    public UserData retrieveUser(String username) {
+        for (UserData user : userData) {
+            if (user.getUsername().equals(username)) {
+                return user;
+            }
+        }
+        return null;
     }
 
     @Override
