@@ -10,10 +10,6 @@ public interface GameDAO {
 
     public GameData readGame(int gameID);
 
-    public void updateGame();
-
-    public void deleteGame();
-
     public void clear();
 
     public boolean isGameInList(String gameName, int gameID);

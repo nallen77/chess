@@ -39,10 +39,10 @@ public class PawnMoveCalculator extends ChessMoveCalculator {
 
                     // Check promotion row in front
                     if (nextRow == 1) {
-                        possibleMoves.add(new ChessMove(myPosition, forwardPosition, ChessPiece.PieceType.QUEEN));
+                        possibleMoves.add(new ChessMove(myPosition, forwardPosition, ChessPiece.PieceType.ROOK));
                         possibleMoves.add(new ChessMove(myPosition, forwardPosition, ChessPiece.PieceType.BISHOP));
                         possibleMoves.add(new ChessMove(myPosition, forwardPosition, ChessPiece.PieceType.KNIGHT));
-                        possibleMoves.add(new ChessMove(myPosition, forwardPosition, ChessPiece.PieceType.ROOK));
+                        possibleMoves.add(new ChessMove(myPosition, forwardPosition, ChessPiece.PieceType.QUEEN));
                     }
                     // Otherwise, check if in starting position and no pieces in front
                     else if (currentRow == 7 && board.getPiece(doubleForward) == null) {
@@ -61,9 +61,9 @@ public class PawnMoveCalculator extends ChessMoveCalculator {
                     if (board.getPiece(forwardLeft) != null) {
                         // Check promotion row front left
                         if (board.getPiece(forwardLeft).getTeamColor() != pieceColor && nextRow == 1) {
-                            possibleMoves.add(new ChessMove(myPosition, forwardLeft, ChessPiece.PieceType.QUEEN));
                             possibleMoves.add(new ChessMove(myPosition, forwardLeft, ChessPiece.PieceType.BISHOP));
                             possibleMoves.add(new ChessMove(myPosition, forwardLeft, ChessPiece.PieceType.KNIGHT));
+                            possibleMoves.add(new ChessMove(myPosition, forwardLeft, ChessPiece.PieceType.QUEEN));
                             possibleMoves.add(new ChessMove(myPosition, forwardLeft, ChessPiece.PieceType.ROOK));
                         }
                         // Check forward left for enemy piece
@@ -114,8 +114,8 @@ public class PawnMoveCalculator extends ChessMoveCalculator {
                     // Check promotion row in front
                     if (nextRow == 8) {
                         possibleMoves.add(new ChessMove(myPosition, forwardPosition, ChessPiece.PieceType.QUEEN));
-                        possibleMoves.add(new ChessMove(myPosition, forwardPosition, ChessPiece.PieceType.BISHOP));
                         possibleMoves.add(new ChessMove(myPosition, forwardPosition, ChessPiece.PieceType.KNIGHT));
+                        possibleMoves.add(new ChessMove(myPosition, forwardPosition, ChessPiece.PieceType.BISHOP));
                         possibleMoves.add(new ChessMove(myPosition, forwardPosition, ChessPiece.PieceType.ROOK));
                     }
                     // Otherwise, check if in starting position and no pieces in front
@@ -135,10 +135,10 @@ public class PawnMoveCalculator extends ChessMoveCalculator {
                     if (board.getPiece(forwardLeft) != null) {
                         // Check promotion row front left
                         if (board.getPiece(forwardLeft).getTeamColor() != pieceColor && nextRow == 8) {
+                            possibleMoves.add(new ChessMove(myPosition, forwardLeft, ChessPiece.PieceType.ROOK));
                             possibleMoves.add(new ChessMove(myPosition, forwardLeft, ChessPiece.PieceType.QUEEN));
                             possibleMoves.add(new ChessMove(myPosition, forwardLeft, ChessPiece.PieceType.BISHOP));
                             possibleMoves.add(new ChessMove(myPosition, forwardLeft, ChessPiece.PieceType.KNIGHT));
-                            possibleMoves.add(new ChessMove(myPosition, forwardLeft, ChessPiece.PieceType.ROOK));
                         }
                         // Check forward left for enemy piece
                         else if (board.getPiece(forwardLeft).getTeamColor() != pieceColor) {
@@ -153,9 +153,9 @@ public class PawnMoveCalculator extends ChessMoveCalculator {
                         // Check promotion row front right
                         if (board.getPiece(forwardRight).getTeamColor() != pieceColor && nextRow == 8) {
                             possibleMoves.add(new ChessMove(myPosition, forwardRight, ChessPiece.PieceType.QUEEN));
-                            possibleMoves.add(new ChessMove(myPosition, forwardRight, ChessPiece.PieceType.BISHOP));
                             possibleMoves.add(new ChessMove(myPosition, forwardRight, ChessPiece.PieceType.KNIGHT));
                             possibleMoves.add(new ChessMove(myPosition, forwardRight, ChessPiece.PieceType.ROOK));
+                            possibleMoves.add(new ChessMove(myPosition, forwardRight, ChessPiece.PieceType.BISHOP));
                         }
                         // Check forward right for enemy piece
                         else if (board.getPiece(forwardRight).getTeamColor() != pieceColor) {

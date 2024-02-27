@@ -10,9 +10,5 @@ public interface UserDAO {
 
     public UserData retrieveUser(String username);
 
-    public void updateUser();
-
-    public void deleteUser();
-
     public void clear();
 }

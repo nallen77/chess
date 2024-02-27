@@ -28,16 +28,6 @@ public class MemoryGameDAO implements GameDAO {
         return null;
     }
 
-    @Override
-    public void updateGame() {
-
-    }
-
-    @Override
-    public void deleteGame() {
-
-    }
-
     public void clear() {
         gameData.clear();
     }

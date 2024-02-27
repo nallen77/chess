@@ -6,7 +6,6 @@ public interface AuthDAO {
 
     public void createAuth(AuthData auth);
     public AuthData readAuth(String authToken);
-    public void updateAuth();
     public boolean deleteAuth(String authToken);
 
     public boolean isAuthInList(String authToken);

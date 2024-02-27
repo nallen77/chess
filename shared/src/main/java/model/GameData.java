@@ -44,14 +44,6 @@ public class GameData {
     }
 
 
-    public ChessGame getGame() {
-        return game;
-    }
-
-    public void setGame(ChessGame game) {
-        this.game = game;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
