@@ -5,9 +5,11 @@ import model.AuthData;
 public interface AuthDAO {
 
     public void createAuth(AuthData auth);
-    public void readAuth();
+    public AuthData readAuth(String authToken);
     public void updateAuth();
     public boolean deleteAuth(String authToken);
+
+    public boolean isAuthInList(String authToken);
 
     public void clear();
 

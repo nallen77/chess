@@ -3,10 +3,11 @@ package server;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import dataAccess.*;
+import requests.CreateGameRequest;
+import requests.JoinGameRequest;
 import requests.LoginRequest;
 import requests.RegisterRequest;
-import response.LoginResponse;
-import response.RegisterResponse;
+import response.*;
 import services.AuthService;
 import services.GameService;
 import services.UserService;
@@ -22,7 +23,7 @@ public class Server {
     AuthDAO memoryAuthDAO = new MemoryAuthDAO();
 
     public Server() {
-        gameService = new GameService(memoryGameDAO);
+        gameService = new GameService(memoryGameDAO, memoryAuthDAO);
         userService = new UserService(memoryUserDAO);
         authService = new AuthService(memoryAuthDAO);
 
@@ -39,15 +40,127 @@ public class Server {
         Spark.post("/session", this::login);
         Spark.delete("/session", this::logout);
         Spark.post("/game", this::createGame);
+        Spark.get("/game", this::listGames);
+        Spark.put("/game", this::joinGame);
 
         Spark.awaitInitialization();
         return Spark.port();
     }
 
-    private Object createGame(Request request, Response response) {
-        String authToken = request.headers("Authorization");
+    private Object joinGame(Request request, Response response) {
+        try {
+            String authToken = request.headers("Authorization");
 
-        var createGameRequest = new Gson().fromJson(request.body(), CreateGameRequest.class);
+            var joinGameRequest = new Gson().fromJson(request.body(), JoinGameRequest.class);
+            joinGameRequest.setAuthToken(authToken);
+            authService.authentication(authToken);
+
+            JoinGameResponse joinGameResponse = gameService.joinGame(joinGameRequest);
+
+            return new Gson().toJson(joinGameResponse);
+        }
+        catch (DataAccessException e) {
+            if (e.getMessage().equals("Error: unauthorized")){
+                response.status(401);
+                JsonObject error = new JsonObject();
+                error.addProperty("error", "JoinGame" );
+                error.addProperty("message", e.getMessage());
+                return new Gson().toJson(error);
+
+            }
+            else if (e.getMessage().equals("Error: already taken")){
+                response.status(403);
+                JsonObject error = new JsonObject();
+                error.addProperty("error", "JoinGame" );
+                error.addProperty("message", e.getMessage());
+                return new Gson().toJson(error);
+
+            }
+            else if (e.getMessage().equals("Error: bad request")){
+                response.status(400);
+                JsonObject error = new JsonObject();
+                error.addProperty("error", "JoinGame" );
+                error.addProperty("message", e.getMessage());
+                return new Gson().toJson(error);
+
+            }
+            else{
+                response.status(500);
+                JsonObject error = new JsonObject();
+                error.addProperty("error", "JoinGame" );
+                error.addProperty("message", e.getMessage());
+                return new Gson().toJson(error);
+
+            }
+        }
+    }
+
+    private Object listGames(Request request, Response response) {
+        try {
+            String authToken = request.headers("Authorization");
+
+            ListGamesResponse listGamesResponse = new ListGamesResponse(gameService.listGames());
+            authService.authentication(authToken);
+
+            return new Gson().toJson(listGamesResponse);
+        }
+        catch (DataAccessException e) {
+            if (e.getMessage().equals("Error: unauthorized")){
+                response.status(401);
+                JsonObject error = new JsonObject();
+                error.addProperty("error", "ListGames" );
+                error.addProperty("message", e.getMessage());
+                return new Gson().toJson(error);
+
+            }
+            else{
+                response.status(500);
+                JsonObject error = new JsonObject();
+                error.addProperty("error", "ListGames" );
+                error.addProperty("message", e.getMessage());
+                return new Gson().toJson(error);
+
+            }
+        }
+    }
+
+    private Object createGame(Request request, Response response) {
+        try {
+            String authToken = request.headers("Authorization");
+
+            var createGameRequest = new Gson().fromJson(request.body(), CreateGameRequest.class);
+            createGameRequest.setAuthToken(authToken);
+            CreateGameResponse createGameResponse = gameService.createGame(createGameRequest);
+            authService.authentication(authToken);
+
+            return new Gson().toJson(createGameResponse);
+        }
+        catch (DataAccessException e) {
+            if(e.getMessage().equals("Error: bad request")){
+                response.status(400);
+                JsonObject error = new JsonObject();
+                error.addProperty("error", "CreateGame Bad Request" );
+                error.addProperty("message", e.getMessage());
+                return new Gson().toJson(error);
+            }
+
+            else if (e.getMessage().equals("Error: unauthorized")){
+                response.status(401);
+                JsonObject error = new JsonObject();
+                error.addProperty("error", "CreateGame" );
+                error.addProperty("message", e.getMessage());
+                return new Gson().toJson(error);
+
+            }
+            else{
+                response.status(500);
+                JsonObject error = new JsonObject();
+                error.addProperty("error", "CreateGame" );
+                error.addProperty("message", e.getMessage());
+                return new Gson().toJson(error);
+
+            }
+        }
     }
 
     private Object logout(Request request, Response response) {

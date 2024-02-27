@@ -14,13 +14,18 @@ public class MemoryGameDAO implements GameDAO {
     }
 
     @Override
-    public void createGame() {
-
+    public void createGame(GameData game) {
+        gameData.add(game);
     }
 
     @Override
-    public void readGame() {
-
+    public GameData readGame(int gameID) {
+        for (GameData game : gameData) {
+            if (game.getGameID() == gameID) {
+                return game;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -35,5 +40,20 @@ public class MemoryGameDAO implements GameDAO {
 
     public void clear() {
         gameData.clear();
+    }
+
+    @Override
+    public boolean isGameInList(String gameName, int gameID) {
+        for (GameData game : gameData) {
+            if (game.getGameName().equals(gameName) || (game.getGameID() == gameID)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public Collection<GameData> listGames() {
+        return gameData;
     }
 }
