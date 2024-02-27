@@ -1,0 +1,39 @@
+package dataAccess;
+
+import model.GameData;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class MemoryGameDAO implements GameDAO {
+
+    public Collection<GameData> gameData;
+
+    public MemoryGameDAO() {
+        gameData = new ArrayList<GameData>();
+    }
+
+    @Override
+    public void createGame() {
+
+    }
+
+    @Override
+    public void readGame() {
+
+    }
+
+    @Override
+    public void updateGame() {
+
+    }
+
+    @Override
+    public void deleteGame() {
+
+    }
+
+    public void clear() {
+        gameData.clear();
+    }
+}
