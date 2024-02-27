@@ -8,7 +8,7 @@ import chess.ChessPosition;
 import java.util.Collection;
 import java.util.HashSet;
 
-public class rookMoveCalculator extends chessMoveCalculator {
+public class RookMoveCalculator extends ChessMoveCalculator {
 
     public static Collection<ChessMove> rookMoves(ChessBoard board, ChessPosition myPosition, ChessGame.TeamColor pieceColor) {
         int currentRow = myPosition.getRow();

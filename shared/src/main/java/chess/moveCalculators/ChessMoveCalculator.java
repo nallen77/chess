@@ -7,7 +7,7 @@ import chess.ChessPosition;
 
 import java.util.HashSet;
 
-public class chessMoveCalculator {
+public class ChessMoveCalculator {
 
     /**
      * @param board the current board state of the game

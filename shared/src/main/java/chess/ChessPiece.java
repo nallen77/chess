@@ -3,7 +3,6 @@ package chess;
 import chess.moveCalculators.*;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Objects;
 
 /**
@@ -58,12 +57,12 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
 
         return switch (pieceType) {
-            case KING -> kingMoveCalculator.kingMoves(board, myPosition, this.pieceColor);
-            case QUEEN -> queenMoveCalculator.queenMoves(board, myPosition, this.pieceColor);
-            case BISHOP -> bishopMoveCalculator.bishopMoves(board, myPosition, this.pieceColor);
-            case KNIGHT -> knightMoveCalculator.knightMoves(board, myPosition, this.pieceColor);
-            case ROOK -> rookMoveCalculator.rookMoves(board, myPosition, this.pieceColor);
-            case PAWN -> pawnMoveCalculator.pawnMoves(board, myPosition, this.pieceColor);
+            case KING -> KingMoveCalculator.kingMoves(board, myPosition, this.pieceColor);
+            case QUEEN -> QueenMoveCalculator.queenMoves(board, myPosition, this.pieceColor);
+            case BISHOP -> BishopMoveCalculator.bishopMoves(board, myPosition, this.pieceColor);
+            case KNIGHT -> KnightMoveCalculator.knightMoves(board, myPosition, this.pieceColor);
+            case ROOK -> RookMoveCalculator.rookMoves(board, myPosition, this.pieceColor);
+            case PAWN -> PawnMoveCalculator.pawnMoves(board, myPosition, this.pieceColor);
         };
     }
 

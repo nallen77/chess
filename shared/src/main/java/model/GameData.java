@@ -8,16 +8,8 @@ public class GameData {
     private int gameID;
     private String whiteUsername;
     private String blackUsername;
-    private String gameName;
+    private final String gameName;
     private ChessGame game;
-
-    public GameData(int gameID, String whiteUsername, String blackUsername, String gameName, ChessGame game) {
-        this.gameID = gameID;
-        this.whiteUsername = whiteUsername;
-        this.blackUsername = blackUsername;
-        this.gameName = gameName;
-        this.game = game;
-    }
 
     public GameData(String gameName) {
         this.gameName = gameName;
@@ -51,9 +43,6 @@ public class GameData {
         return gameName;
     }
 
-    public void setGameName(String gameName) {
-        this.gameName = gameName;
-    }
 
     public ChessGame getGame() {
         return game;
