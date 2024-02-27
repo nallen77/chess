@@ -49,6 +49,7 @@ public class GameService {
 
     public Collection<GameData> listGames() {
         Collection<GameData> games = gameDAO.listGames();
+
         return games;
     }
 
