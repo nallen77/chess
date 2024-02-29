@@ -2,8 +2,8 @@ package requests;
 
 public class RegisterRequest {
     private String username;
-    private String password;
-    private String email;
+    private final String password;
+    private final String email;
 
     public RegisterRequest(String username, String password, String email) {
         this.username = username;

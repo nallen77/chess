@@ -2,7 +2,7 @@ package requests;
 
 public class CreateGameRequest {
 
-    private String gameName;
+    private final String gameName;
     private String authToken;
 
     public CreateGameRequest(String gameName, String authToken) {

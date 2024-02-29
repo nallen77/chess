@@ -42,10 +42,7 @@ public class AuthService {
     }
 
     public boolean authentication(String authToken) throws DataAccessException {
-        if (authDAO.isAuthInList(authToken)) {
-            return true;
-
-        }
+        if (authDAO.isAuthInList(authToken)) return true;
         else{
             throw new DataAccessException("Error: unauthorized");
         }

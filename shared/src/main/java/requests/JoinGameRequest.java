@@ -2,9 +2,9 @@ package requests;
 
 public class JoinGameRequest {
 
-    private String playerColor;
+    private final String playerColor;
     private String authToken;
-    private int gameID;
+    private final int gameID;
 
     public JoinGameRequest(String playerColor, String authToken, int gameID) {
         this.playerColor = playerColor;

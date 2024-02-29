@@ -2,7 +2,7 @@ package response;
 
 public class CreateGameResponse {
 
-    private int gameID;
+    private final int gameID;
     private String authToken;
     public CreateGameResponse(int gameID) {
         this.gameID = gameID;
