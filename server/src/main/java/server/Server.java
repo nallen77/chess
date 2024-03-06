@@ -16,16 +16,24 @@ import spark.*;
 public class Server {
 
     private final GameService gameService;
-    GameDAO databaseGameDAO = new DatabaseGameDAO();
+    GameDAO databaseGameDAO;
     private final UserService userService;
-    UserDAO databaseUserDAO = new DatabaseUserDAO();
+    UserDAO databaseUserDAO;
     private final AuthService authService;
-    AuthDAO databaseAuthDAO = new DatabaseAuthDAO();
+    AuthDAO databaseAuthDAO;
 
     public Server() {
-        gameService = new GameService(databaseGameDAO, databaseAuthDAO);
-        userService = new UserService(databaseUserDAO);
-        authService = new AuthService(databaseAuthDAO);
+        try{
+            databaseAuthDAO = new DatabaseAuthDAO();
+            databaseGameDAO = new DatabaseGameDAO();
+            databaseUserDAO = new DatabaseUserDAO();
+            gameService = new GameService(databaseGameDAO, databaseAuthDAO);
+            userService = new UserService(databaseUserDAO);
+            authService = new AuthService(databaseAuthDAO);
+        }
+        catch(Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     public int run(int desiredPort) {

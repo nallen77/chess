@@ -8,6 +8,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DatabaseAuthDAO implements AuthDAO {
+
+    public DatabaseAuthDAO() throws DataAccessException {
+        DatabaseManager.createTables();
+    }
     @Override
     public void createAuth(AuthData auth) {
         try (Connection connection = DatabaseManager.getConnection()) {
