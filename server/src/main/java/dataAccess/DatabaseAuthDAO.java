@@ -57,6 +57,18 @@ public class DatabaseAuthDAO implements AuthDAO {
 
     @Override
     public boolean isAuthInList(String authToken) {
+        try (Connection connection = DatabaseManager.getConnection()) {
+            String query = "SELECT COUNT(*) AS count FROM AuthData WHERE authToken = ?";
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setString(1, authToken);
+                ResultSet resultSet = statement.executeQuery();
+                if (resultSet.next()) {
+                    return resultSet.getInt("count") > 0;
+                }
+            }
+        } catch (SQLException | DataAccessException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
