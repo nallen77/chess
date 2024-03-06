@@ -40,10 +40,18 @@ public class DatabaseManager {
             var conn = DriverManager.getConnection(connectionUrl, user, password);
             try (var preparedStatement = conn.prepareStatement(statement)) {
                 preparedStatement.executeUpdate();
+                sqlStatements();
             }
         } catch (SQLException e) {
             throw new DataAccessException(e.getMessage());
         }
+    }
+
+    /**
+     *
+     */
+    static void sqlStatements(){
+        // TODO use SQL to create tables and stuff
     }
 
     /**
