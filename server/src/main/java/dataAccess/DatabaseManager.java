@@ -37,21 +37,58 @@ public class DatabaseManager {
     static void createDatabase() throws DataAccessException {
         try {
             var statement = "CREATE DATABASE IF NOT EXISTS " + databaseName;
-            var conn = DriverManager.getConnection(connectionUrl, user, password);
-            try (var preparedStatement = conn.prepareStatement(statement)) {
+
+            try (var conn = DriverManager.getConnection(connectionUrl, user, password);
+                 var preparedStatement = conn.prepareStatement(statement)) {
                 preparedStatement.executeUpdate();
-                sqlStatements();
+
             }
         } catch (SQLException e) {
             throw new DataAccessException(e.getMessage());
         }
     }
 
+    private static final String[] createStatement = {
+        "CREATE TABLE IF NOT EXISTS UserData (" +
+        "    username VARCHAR(255) NOT NULL," +
+        "    password VARCHAR(255) NOT NULL," +
+        "    email VARCHAR(255) NOT NULL," +
+        "    PRIMARY KEY (username)" +
+        ")" +
+        "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
+
+        "CREATE TABLE IF NOT EXISTS GameData (" +
+        "    gameID INT AUTO_INCREMENT NOT NULL," +
+        "    whiteUsername VARCHAR(255)," +
+        "    blackUsername VARCHAR(255)," +
+        "    gameName VARCHAR(255) NOT NULL," +
+        "    game TEXT NOT NULL," +
+        "    PRIMARY KEY (gameID)" +
+        ")" +
+        "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
+
+        "CREATE TABLE IF NOT EXISTS AuthData (" +
+        "    authToken VARCHAR(255)," +
+        "    username VARCHAR(255) NOT NULL," +
+        "    PRIMARY KEY (authToken)" +
+        ")" +
+        "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    };
+
     /**
-     *
+     * Use the SQL statement to try to make the tables in the database
      */
-    static void sqlStatements(){
-        // TODO use SQL to create tables and stuff
+    static void createTables() throws DataAccessException {
+        createDatabase();
+        try (var conn = getConnection()) {
+            for (var sqlStatement : createStatement) {
+                try (var preparedStatement = conn.prepareStatement(sqlStatement)) {
+                    preparedStatement.executeUpdate();
+                }
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        }
     }
 
     /**
