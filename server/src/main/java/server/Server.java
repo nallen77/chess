@@ -16,28 +16,16 @@ import spark.*;
 public class Server {
 
     private final GameService gameService;
-//    GameDAO memoryGameDAO = new MemoryGameDAO();
     GameDAO databaseGameDAO = new DatabaseGameDAO();
-
     private final UserService userService;
-
-//    UserDAO memoryUserDAO = new MemoryUserDAO();
     UserDAO databaseUserDAO = new DatabaseUserDAO();
-
     private final AuthService authService;
-//    AuthDAO memoryAuthDAO = new MemoryAuthDAO();
     AuthDAO databaseAuthDAO = new DatabaseAuthDAO();
 
     public Server() {
-
-//        gameService = new GameService(memoryGameDAO, memoryAuthDAO);
-//        userService = new UserService(memoryUserDAO);
-//        authService = new AuthService(memoryAuthDAO);
-
         gameService = new GameService(databaseGameDAO, databaseAuthDAO);
         userService = new UserService(databaseUserDAO);
         authService = new AuthService(databaseAuthDAO);
-
     }
 
     public int run(int desiredPort) {
