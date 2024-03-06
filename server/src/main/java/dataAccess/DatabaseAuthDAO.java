@@ -4,6 +4,7 @@ import model.AuthData;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DatabaseAuthDAO implements AuthDAO {
@@ -23,6 +24,18 @@ public class DatabaseAuthDAO implements AuthDAO {
 
     @Override
     public AuthData readAuth(String authToken) {
+        try (Connection connection = DatabaseManager.getConnection()) {
+            String query = "SELECT * FROM AuthData WHERE authToken = ?";
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setString(1, authToken);
+                ResultSet resultSet = statement.executeQuery();
+                if (resultSet.next()) {
+                    return new AuthData(resultSet.getString("authToken"), resultSet.getString("username"));
+                }
+            }
+        } catch (SQLException | DataAccessException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 

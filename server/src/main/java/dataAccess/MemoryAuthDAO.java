@@ -10,7 +10,7 @@ public class MemoryAuthDAO implements AuthDAO {
     public Collection<AuthData> authData;
 
     public MemoryAuthDAO() {
-        authData = new ArrayList<AuthData>();
+        authData = new ArrayList<>();
     }
 
     @Override
