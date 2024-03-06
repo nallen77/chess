@@ -74,6 +74,13 @@ public class DatabaseAuthDAO implements AuthDAO {
 
     @Override
     public void clear() {
-
+        try (Connection connection = DatabaseManager.getConnection()) {
+            String query = "DELETE FROM AuthData";
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.executeUpdate();
+            }
+        } catch (SQLException | DataAccessException e) {
+            e.printStackTrace();
+        }
     }
 }
