@@ -2,6 +2,7 @@ package dataAccess;
 
 import model.AuthData;
 
+import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -41,7 +42,17 @@ public class DatabaseAuthDAO implements AuthDAO {
 
     @Override
     public boolean deleteAuth(String authToken) {
-        return false;
+        try (Connection connection = DatabaseManager.getConnection()) {
+            String query = "DELETE FROM AuthData WHERE authToken = ?";
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setString(1, authToken);
+                int rowsAffected = statement.executeUpdate();
+                return rowsAffected > 0;
+            }
+        } catch (SQLException | DataAccessException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
