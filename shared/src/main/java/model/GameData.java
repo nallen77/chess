@@ -9,6 +9,15 @@ public class GameData {
     private String whiteUsername;
     private String blackUsername;
     private final String gameName;
+
+    public ChessGame getGame() {
+        return game;
+    }
+
+    public void setGame(ChessGame game) {
+        this.game = game;
+    }
+
     private ChessGame game;
 
     public GameData(String gameName) {
