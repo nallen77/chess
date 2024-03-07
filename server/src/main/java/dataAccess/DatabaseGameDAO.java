@@ -12,6 +12,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class DatabaseGameDAO implements GameDAO {
+
+    public DatabaseGameDAO() throws DataAccessException {
+        DatabaseManager.createTables();
+    }
+
     @Override
     public void createGame(GameData game) {
         try (Connection connection = DatabaseManager.getConnection()) {

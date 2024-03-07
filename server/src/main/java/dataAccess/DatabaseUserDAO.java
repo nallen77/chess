@@ -8,6 +8,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DatabaseUserDAO implements UserDAO {
+
+    public DatabaseUserDAO() throws DataAccessException {
+        DatabaseManager.createTables();
+    }
+
     @Override
     public void createUser(UserData user) {
         try (Connection connection = DatabaseManager.getConnection()) {
