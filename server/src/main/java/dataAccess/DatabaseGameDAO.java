@@ -1,5 +1,7 @@
 package dataAccess;
 
+import chess.ChessGame;
+import com.google.gson.Gson;
 import model.GameData;
 
 import java.sql.Connection;
@@ -15,11 +17,13 @@ public class DatabaseGameDAO implements GameDAO {
         try (Connection connection = DatabaseManager.getConnection()) {
             String query = "INSERT INTO GameData (gameID, whiteUsername, blackUsername, gameName, game) VALUES (?, ?, ?, ?)";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setInt(1, game.getGameID());
                 statement.setString(2, game.getWhiteUsername());
                 statement.setString(3, game.getBlackUsername());
                 statement.setString(4, game.getGameName());
-                statement.setInt(1, game.getGameID());
-                statement.setString(5, game.getGame()); //TODO how do we capture the game object?
+                ChessGame chessGame = game.getGame();
+                Gson gson = new Gson();
+                statement.setString(5, gson.toJson(chessGame));
                 statement.executeUpdate();
             }
         } catch (SQLException | DataAccessException e) {
@@ -35,12 +39,15 @@ public class DatabaseGameDAO implements GameDAO {
                 statement.setInt(1, gameID);
                 ResultSet resultSet = statement.executeQuery();
                 if (resultSet.next()) {
+                    var game = resultSet.getString("game");
+                    Gson gson = new Gson();
+                    ChessGame chessGame = gson.fromJson(game, ChessGame.class);
                     return new GameData(
-                            resultSet.getInt("gameID"), //TODO which type should this be?
+                            gameID,
                             resultSet.getString("whiteUsername"),
                             resultSet.getString("blackUsername"),
                             resultSet.getString("gameName"),
-                            resultSet.getString("game")
+                            chessGame
                     );
                 }
             }
@@ -88,14 +95,17 @@ public class DatabaseGameDAO implements GameDAO {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 ResultSet resultSet = statement.executeQuery();
                 while (resultSet.next()) {
-                    GameData game = new GameData(
-                            resultSet.getInt("gameID"), //TODO
+                    var game = resultSet.getString("game");
+                    Gson gson = new Gson();
+                    ChessGame chessGame = gson.fromJson(game, ChessGame.class);
+                    GameData gameData = new GameData(
+                            resultSet.getInt("gameID"),
                             resultSet.getString("whiteUsername"),
                             resultSet.getString("blackUsername"),
                             resultSet.getString("gameName"),
-                            resultSet.getString("game")
+                            chessGame
                     );
-                    games.add(game);
+                    games.add(gameData);
                 }
             }
         } catch (SQLException | DataAccessException e) {
