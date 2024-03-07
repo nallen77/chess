@@ -4,12 +4,12 @@ import model.AuthData;
 
 public interface AuthDAO {
 
-    public void createAuth(AuthData auth);
-    public AuthData readAuth(String authToken);
-    public boolean deleteAuth(String authToken);
+    public void createAuth(AuthData auth) throws DataAccessException;
+    public AuthData readAuth(String authToken) throws DataAccessException;
+    public void deleteAuth(String authToken) throws DataAccessException;
 
-    public boolean isAuthInList(String authToken);
+    public boolean isAuthInList(String authToken) throws DataAccessException;
 
-    public void clear();
+    public void clear() throws DataAccessException;
 
 }

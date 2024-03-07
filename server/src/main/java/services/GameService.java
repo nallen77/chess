@@ -23,7 +23,7 @@ public class GameService {
         this.authDAO = authDAO;
     }
 
-    public void clear() {
+    public void clear() throws DataAccessException {
         gameDAO.clear();
     }
 
@@ -35,19 +35,20 @@ public class GameService {
         if (gameDAO.isGameInList(createGameRequest.getGameName(), 0)) {
             throw new DataAccessException("Error: already taken");
         }
-
-        GameData newGame = new GameData(createGameRequest.getGameName());
-        gameDAO.createGame(newGame);
         int newGameID = 0;
         while(newGameID <= 0) {
             newGameID = ThreadLocalRandom.current().nextInt();
         }
 
+
+        GameData newGame = new GameData(createGameRequest.getGameName());
         newGame.setGameID(newGameID);
+        gameDAO.createGame(newGame);
+
         return new CreateGameResponse(newGame.getGameID());
     }
 
-    public Collection<GameData> listGames() {
+    public Collection<GameData> listGames() throws DataAccessException {
         Collection<GameData> games = gameDAO.listGames();
 
         return games;
@@ -68,11 +69,15 @@ public class GameService {
             throw new DataAccessException("Error: already taken");
         }
         if (joinGameRequest.getPlayerColor().equals("WHITE") && gameDAO.readGame(joinGameRequest.getGameID()).getWhiteUsername() == null) {
-            gameDAO.readGame(joinGameRequest.getGameID()).setWhiteUsername(authDAO.readAuth(joinGameRequest.getAuthToken()).getUsername());
+            GameData gameData = gameDAO.readGame(joinGameRequest.getGameID());
+            gameData.setWhiteUsername(authDAO.readAuth(joinGameRequest.getAuthToken()).getUsername());
+            gameDAO.joinGame(gameData);
             return new JoinGameResponse(joinGameRequest.getAuthToken(), joinGameRequest.getGameID(), "WHITE", null);
         }
         else if (joinGameRequest.getPlayerColor().equals("BLACK") && gameDAO.readGame(joinGameRequest.getGameID()).getBlackUsername() == null) {
-            gameDAO.readGame(joinGameRequest.getGameID()).setBlackUsername(authDAO.readAuth(joinGameRequest.getAuthToken()).getUsername());
+            GameData gameData = gameDAO.readGame(joinGameRequest.getGameID());
+            gameData.setBlackUsername(authDAO.readAuth(joinGameRequest.getAuthToken()).getUsername());
+            gameDAO.joinGame(gameData);
             return new JoinGameResponse(joinGameRequest.getAuthToken(), joinGameRequest.getGameID(), "BLACK", null);
         }
         else {

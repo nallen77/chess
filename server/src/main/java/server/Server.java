@@ -256,7 +256,7 @@ public class Server {
         }
     }
 
-    private Object clear(Request request, Response response) {
+    private Object clear(Request request, Response response) throws DataAccessException {
         gameService.clear();
         userService.clear();
         authService.clear();

@@ -14,7 +14,7 @@ public class DatabaseUserDAO implements UserDAO {
     }
 
     @Override
-    public void createUser(UserData user) {
+    public void createUser(UserData user) throws DataAccessException {
         try (Connection connection = DatabaseManager.getConnection()) {
             String query = "INSERT INTO UserData (username, password, email) VALUES (?, ?, ?)";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -25,11 +25,12 @@ public class DatabaseUserDAO implements UserDAO {
             }
         } catch (SQLException | DataAccessException e) {
             e.printStackTrace();
+            throw new DataAccessException("Error: SQL");
         }
     }
 
     @Override
-    public boolean isUserInList(String username) {
+    public boolean isUserInList(String username) throws DataAccessException {
         try (Connection connection = DatabaseManager.getConnection()) {
             String query = "SELECT COUNT(*) AS count FROM UserData WHERE username = ?";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -41,12 +42,13 @@ public class DatabaseUserDAO implements UserDAO {
             }
         } catch (SQLException | DataAccessException e) {
             e.printStackTrace();
+            throw new DataAccessException("Error: SQL");
         }
         return false;
     }
 
     @Override
-    public UserData retrieveUser(String username) {
+    public UserData retrieveUser(String username) throws DataAccessException {
         try (Connection connection = DatabaseManager.getConnection()) {
             String query = "SELECT * FROM UserData WHERE username = ?";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -62,12 +64,13 @@ public class DatabaseUserDAO implements UserDAO {
             }
         } catch (SQLException | DataAccessException e) {
             e.printStackTrace();
+            throw new DataAccessException("Error: SQL");
         }
         return null;
     }
 
     @Override
-    public void clear() {
+    public void clear() throws DataAccessException {
         try (Connection connection = DatabaseManager.getConnection()) {
             String query = "DELETE FROM UserData";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -75,6 +78,7 @@ public class DatabaseUserDAO implements UserDAO {
             }
         } catch (SQLException | DataAccessException e) {
             e.printStackTrace();
+            throw new DataAccessException("Error: SQL");
         }
     }
 }

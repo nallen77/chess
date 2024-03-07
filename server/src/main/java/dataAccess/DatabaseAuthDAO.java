@@ -13,7 +13,7 @@ public class DatabaseAuthDAO implements AuthDAO {
         DatabaseManager.createTables();
     }
     @Override
-    public void createAuth(AuthData auth) {
+    public void createAuth(AuthData auth) throws DataAccessException {
         try (Connection connection = DatabaseManager.getConnection()) {
             String query = "INSERT INTO AuthData (authToken, username) VALUES (?, ?)";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -23,43 +23,47 @@ public class DatabaseAuthDAO implements AuthDAO {
             }
         } catch (SQLException | DataAccessException e) {
             e.printStackTrace();
+            throw new DataAccessException("Error: SQL");
         }
     }
 
     @Override
-    public AuthData readAuth(String authToken) {
+    public AuthData readAuth(String authToken) throws DataAccessException {
         try (Connection connection = DatabaseManager.getConnection()) {
             String query = "SELECT * FROM AuthData WHERE authToken = ?";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setString(1, authToken);
                 ResultSet resultSet = statement.executeQuery();
                 if (resultSet.next()) {
-                    return new AuthData(resultSet.getString("authToken"), resultSet.getString("username"));
+                    return new AuthData(resultSet.getString("username"), resultSet.getString("authToken"));
                 }
             }
         } catch (SQLException | DataAccessException e) {
             e.printStackTrace();
+            throw new DataAccessException("Error: SQL");
         }
         return null;
     }
 
     @Override
-    public boolean deleteAuth(String authToken) {
+    public void deleteAuth(String authToken) throws DataAccessException {
+        if (!isAuthInList(authToken)) {
+            throw new DataAccessException("Error: unauthorized");
+        }
         try (Connection connection = DatabaseManager.getConnection()) {
             String query = "DELETE FROM AuthData WHERE authToken = ?";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setString(1, authToken);
-                int rowsAffected = statement.executeUpdate();
-                return rowsAffected > 0;
+                statement.executeUpdate();
             }
         } catch (SQLException | DataAccessException e) {
             e.printStackTrace();
-            return false;
+            throw new DataAccessException("Error: SQL");
         }
     }
 
     @Override
-    public boolean isAuthInList(String authToken) {
+    public boolean isAuthInList(String authToken) throws DataAccessException {
         try (Connection connection = DatabaseManager.getConnection()) {
             String query = "SELECT COUNT(*) AS count FROM AuthData WHERE authToken = ?";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -71,12 +75,13 @@ public class DatabaseAuthDAO implements AuthDAO {
             }
         } catch (SQLException | DataAccessException e) {
             e.printStackTrace();
+            throw new DataAccessException("Error: SQL");
         }
         return false;
     }
 
     @Override
-    public void clear() {
+    public void clear() throws DataAccessException {
         try (Connection connection = DatabaseManager.getConnection()) {
             String query = "DELETE FROM AuthData";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -84,6 +89,7 @@ public class DatabaseAuthDAO implements AuthDAO {
             }
         } catch (SQLException | DataAccessException e) {
             e.printStackTrace();
+            throw new DataAccessException("Error: SQL");
         }
     }
 }

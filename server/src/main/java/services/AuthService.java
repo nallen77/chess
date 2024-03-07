@@ -16,11 +16,11 @@ public class AuthService {
         this.authDAO = authDAO;
     }
 
-    public void clear() {
+    public void clear() throws DataAccessException {
         authDAO.clear();
     }
 
-    public String makeAuthToken(RegisterRequest registerRequest, LoginRequest loginRequest) {
+    public String makeAuthToken(RegisterRequest registerRequest, LoginRequest loginRequest) throws DataAccessException {
         AuthData newAuth = new AuthData();
         if(registerRequest != null){
             newAuth.setUsername(registerRequest.getUsername());
@@ -36,9 +36,7 @@ public class AuthService {
     }
 
     public void logout(String authToken) throws DataAccessException {
-        if (!authDAO.deleteAuth(authToken)) {
-            throw new DataAccessException("Error: unauthorized");
-        }
+        authDAO.deleteAuth(authToken);
     }
 
     public boolean authentication(String authToken) throws DataAccessException {

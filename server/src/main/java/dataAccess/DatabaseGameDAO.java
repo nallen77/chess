@@ -18,9 +18,9 @@ public class DatabaseGameDAO implements GameDAO {
     }
 
     @Override
-    public void createGame(GameData game) {
+    public void createGame(GameData game) throws DataAccessException {
         try (Connection connection = DatabaseManager.getConnection()) {
-            String query = "INSERT INTO GameData (gameID, whiteUsername, blackUsername, gameName, game) VALUES (?, ?, ?, ?)";
+            String query = "INSERT INTO GameData (gameID, whiteUsername, blackUsername, gameName, game) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setInt(1, game.getGameID());
                 statement.setString(2, game.getWhiteUsername());
@@ -33,11 +33,12 @@ public class DatabaseGameDAO implements GameDAO {
             }
         } catch (SQLException | DataAccessException e) {
             e.printStackTrace();
+            throw new DataAccessException("Error: SQL");
         }
     }
 
     @Override
-    public GameData readGame(int gameID) {
+    public GameData readGame(int gameID) throws DataAccessException {
         try (Connection connection = DatabaseManager.getConnection()) {
             String query = "SELECT * FROM GameData WHERE gameID = ?";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -58,12 +59,13 @@ public class DatabaseGameDAO implements GameDAO {
             }
         } catch (SQLException | DataAccessException e) {
             e.printStackTrace();
+            throw new DataAccessException("Error: SQL");
         }
         return null;
     }
 
     @Override
-    public void clear() {
+    public void clear() throws DataAccessException {
         try (Connection connection = DatabaseManager.getConnection()) {
             String query = "DELETE FROM GameData";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -71,11 +73,12 @@ public class DatabaseGameDAO implements GameDAO {
             }
         } catch (SQLException | DataAccessException e) {
             e.printStackTrace();
+            throw new DataAccessException("Error: SQL");
         }
     }
 
     @Override
-    public boolean isGameInList(String gameName, int gameID) {
+    public boolean isGameInList(String gameName, int gameID) throws DataAccessException {
         try (Connection connection = DatabaseManager.getConnection()) {
             String query = "SELECT COUNT(*) AS count FROM GameData WHERE gameName = ? OR gameID = ?";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -88,12 +91,13 @@ public class DatabaseGameDAO implements GameDAO {
             }
         } catch (SQLException | DataAccessException e) {
             e.printStackTrace();
+            throw new DataAccessException("Error: SQL");
         }
         return false;
     }
 
     @Override
-    public Collection<GameData> listGames() {
+    public Collection<GameData> listGames() throws DataAccessException {
         Collection<GameData> games = new ArrayList<>();
         try (Connection connection = DatabaseManager.getConnection()) {
             String query = "SELECT * FROM GameData";
@@ -115,8 +119,31 @@ public class DatabaseGameDAO implements GameDAO {
             }
         } catch (SQLException | DataAccessException e) {
             e.printStackTrace();
+            throw new DataAccessException("Error: SQL");
         }
         return games;
 
+    }
+
+    @Override
+    public void joinGame(GameData gameData) throws DataAccessException {
+        var updateStatement = "UPDATE GameData SET blackUsername = ?, whiteUsername = ? WHERE gameID = ?";
+        var gameID = gameData.getGameID();
+
+        if (readGame(gameID) == null) {
+            throw new DataAccessException("Error: gameID is invalid");
+        }
+
+        var whiteUsername = gameData.getWhiteUsername();
+        var blackUsername = gameData.getBlackUsername();
+        try (var connection = DatabaseManager.getConnection();
+             var preparedStatement = connection.prepareStatement(updateStatement)) {
+            preparedStatement.setString(1, blackUsername);
+            preparedStatement.setString(2, whiteUsername);
+            preparedStatement.setInt(3, gameID);
+            preparedStatement.executeUpdate();
+        } catch (DataAccessException | SQLException e) {
+            throw new DataAccessException("Error with statement: " + updateStatement);
+        }
     }
 }

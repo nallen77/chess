@@ -34,7 +34,7 @@ public class serviceTests {
 
 
     @BeforeEach
-    public void clear(){
+    public void clear() throws DataAccessException {
         userService.clear();
         gameService.clear();
         authService.clear();
