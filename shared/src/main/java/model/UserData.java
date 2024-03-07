@@ -47,4 +47,8 @@ public class UserData {
                 ", email='" + email + '\'' +
                 '}';
     }
+
+    public String getEmail() {
+        return email;
+    }
 }
