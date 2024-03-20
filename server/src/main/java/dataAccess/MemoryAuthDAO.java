@@ -4,6 +4,7 @@ import model.AuthData;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
 public class MemoryAuthDAO implements AuthDAO {
 
@@ -28,15 +29,29 @@ public class MemoryAuthDAO implements AuthDAO {
         return null;
     }
 
+//    @Override
+//    public void deleteAuth(String authToken) throws DataAccessException {
+//        for (AuthData auth : authData) {
+//            if (auth.getAuthToken().equals(authToken)) {
+//                authData.remove(auth);
+//            }
+//        }
+//        throw new DataAccessException("Error: unauthorized");
+//    }
+
     @Override
     public void deleteAuth(String authToken) throws DataAccessException {
-        for (AuthData auth : authData) {
+        Iterator<AuthData> iterator = authData.iterator();
+        while (iterator.hasNext()) {
+            AuthData auth = iterator.next();
             if (auth.getAuthToken().equals(authToken)) {
-                authData.remove(auth);
+                iterator.remove();
+                return;
             }
         }
         throw new DataAccessException("Error: unauthorized");
     }
+
 
     @Override
     public boolean isAuthInList(String authToken) {
