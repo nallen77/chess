@@ -19,9 +19,9 @@ public class ChessClient {
         this.serverUrl = serverUrl;
     }
 
-    public String eval(String input) {
+    public String eval(String line) {
         try {
-            var tokens = input.toLowerCase().split(" ");
+            var tokens = line.toLowerCase().split(" ");
             var cmd = (tokens.length > 0) ? tokens[0] : "help";
             var params = Arrays.copyOfRange(tokens, 1, tokens.length);
             if (state == State.SIGNEDOUT) {
@@ -81,7 +81,7 @@ public class ChessClient {
     public String list() throws ResponseException {
         assertSignedIn();
         server.list();
-        return String.format("Game List:");//TODO
+        return "Game List:";//TODO what should this return?
     }
 
     public String join(String... params) throws ResponseException { //TODO [WHITE|BLACK|<empty>] ??
