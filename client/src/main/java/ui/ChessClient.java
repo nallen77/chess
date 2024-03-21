@@ -49,11 +49,11 @@ public class ChessClient {
     }
 
     public String register(String... params) throws ResponseException {
-        if (params.length >= 1) {
+        if (params.length == 3) {
             state = State.SIGNEDIN;
-            username = String.join("-", params);
-            password = ;//TODO
-            email = ;//TODO
+            username = params[0];
+            password = params[1];
+            email = params[2];
             server.register(username, password, email);
             return String.format("You registered as %s.", username);
         }

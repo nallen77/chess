@@ -2,6 +2,8 @@ package ui;
 
 import com.google.gson.Gson;
 import exception.ResponseException;
+import requests.RegisterRequest;
+import response.RegisterResponse;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,6 +16,7 @@ import java.net.URL;
 public class ServerFacade {
 
     private final String serverUrl;
+    static String authToken = null;
 
     public ServerFacade(String url) {
         serverUrl = url;
@@ -72,8 +75,10 @@ public class ServerFacade {
     }
 
 
-    public void register(String username, String password, String email) {
-
+    public void register(String username, String password, String email) throws ResponseException {
+        RegisterResponse response = this.makeRequest("POST", "/user",
+                new RegisterRequest(username, password, email), RegisterResponse.class);
+        authToken = response.getAuthToken();
     }
 
     public void login(String username) {
