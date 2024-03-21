@@ -1,5 +1,7 @@
 package ui;
 
+import exception.ResponseException;
+
 import java.util.Arrays;
 
 public class ChessClient {
@@ -48,13 +50,19 @@ public class ChessClient {
             visitorName = String.join("-", params);
             ws = new WebSocketFacade(serverUrl, notificationHandler);
             ws.enterPetShop(visitorName);
-            return String.format("You signed in as %s.", visitorName);
+            return String.format("You registered as %s.", visitorName);
         }
         throw new ResponseException(400, "Expected: <yourname>");
     }
 
     public String login(String... params) {
-        return "";
+        if (params.length >= 1) {
+            state = State.SIGNEDIN;
+            visitorName = String.join("-", params);
+            //TODO
+            return String.format("You logged in as %s.", visitorName);
+        }
+        throw new Exception();
     }
 
 
@@ -67,6 +75,7 @@ public class ChessClient {
     }
 
     public String create(String... params) {
+        assertSignedIn();
         return null;
     }
 
