@@ -3,6 +3,14 @@ package ui;
 import com.google.gson.Gson;
 import exception.ResponseException;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URL;
+
 public class ServerFacade {
 
     private final String serverUrl;

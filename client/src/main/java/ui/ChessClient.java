@@ -55,14 +55,14 @@ public class ChessClient {
         throw new ResponseException(400, "Expected: <yourname>");
     }
 
-    public String login(String... params) {
+    public String login(String... params) throws ResponseException {
         if (params.length >= 1) {
             state = State.SIGNEDIN;
             visitorName = String.join("-", params);
             //TODO
             return String.format("You logged in as %s.", visitorName);
         }
-        throw new Exception();
+        throw new ResponseException(400, ""); //TODO
     }
 
 
@@ -74,7 +74,7 @@ public class ChessClient {
         return String.format("%s logged out", visitorName);
     }
 
-    public String create(String... params) {
+    public String create(String... params) throws ResponseException {
         assertSignedIn();
         return null;
     }
