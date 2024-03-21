@@ -34,11 +34,11 @@ public class ChessClient {
             }
             else {
                 return switch (cmd) {
-                    case "create <NAME>" -> create(params);
-                    case "list" -> list();
-                    case "join <ID>" -> join(params);
-                    case "observe <ID>" -> observe(params);
-                    case "logout" -> logout();
+//                    case "create <NAME>" -> create(params);
+//                    case "list" -> list();
+//                    case "join <ID>" -> join(params);
+//                    case "observe <ID>" -> observe(params);
+//                    case "logout" -> logout();
                     case "quit" -> "quit";
                     default -> help();
                 };
@@ -49,61 +49,70 @@ public class ChessClient {
     }
 
     public String register(String... params) throws ResponseException {
-        if (params.length == 3) {
-            state = State.SIGNEDIN;
-            username = params[0];
-            password = params[1];
-            email = params[2];
-            server.register(username, password, email);
-            return String.format("You registered as %s.", username);
+        try {
+            if (params.length == 3) {
+                state = State.SIGNEDIN;
+                username = params[0];
+                password = params[1];
+                email = params[2];
+                server.register(username, password, email);
+                return String.format("You registered as %s.", username);
+            }
+        } catch (ResponseException e) {
+            return "Register error exception: " + e.getMessage();
         }
-        throw new ResponseException(400, "Failed to register");
+        return "Register error: incorrect usage";
     }
 
     public String login(String... params) throws ResponseException {
-        if (params.length >= 1) {
-            state = State.SIGNEDIN;
-            username = String.join("-", params);
-            password = ;//TODO
-            server.login(username);
-            return String.format("You logged in as %s.", username);
+        try {
+            if (params.length == 2) {
+                state = State.SIGNEDIN;
+                username = params[0];
+                password = params[1];
+                server.login(username, password);
+                return String.format("You logged in as %s.", username);
+            }
         }
-        throw new ResponseException(400, "Failed to login");
+        catch (ResponseException e) {
+            return "Login error exception: " + e.getMessage();
+        }
+        return "Login error: incorrect usage";
     }
-
-    public String create(String... params) throws ResponseException {
-        assertSignedIn();
-        gameName = String.join("-", params);
-        server.create(gameName);
-        return String.format("Created game %s.", gameName);
-    }
-
-    public String list() throws ResponseException {
-        assertSignedIn();
-        server.list();
-        return "Game List:";//TODO what should this return?
-    }
-
-    public String join(String... params) throws ResponseException { //TODO [WHITE|BLACK|<empty>] ??
-        assertSignedIn();
-        gameID = String.join("-", params);
-        server.join(gameID);
-        return String.format("Joined game with ID: %s", gameID);
-    }
-
-    public String observe(String... params) throws ResponseException {
-        assertSignedIn();
-        gameID = String.join("-", params);
-        server.observe(gameID);
-        return String.format("Observing game with ID: %s", gameID);
-    }
-
-    public String logout() throws ResponseException {
-        assertSignedIn();
-        server.logout();
-        state = State.SIGNEDOUT;
-        return String.format("%s logged out", username);
-    }
+//
+//    public String create(String... params) throws ResponseException {
+//        assertSignedIn();
+//        gameName = String.join("-", params);
+//        server.create(gameName);
+//        return String.format("Created game %s.", gameName);
+//    }
+//
+//    public String list() throws ResponseException {
+//        assertSignedIn();
+//        server.list();
+//        return "Game List:";//TODO what should this return?
+//    }
+//
+//    public String join(String... params) throws ResponseException { //TODO [WHITE|BLACK|<empty>] ??
+//        assertSignedIn();
+//        gameID = String.join("-", params);
+//        server.join(gameID);
+//        return String.format("Joined game with ID: %s", gameID);
+//    }
+//
+//    public String observe(String... params) throws ResponseException {
+//        assertSignedIn();
+//        gameID = String.join("-", params);
+//        server.observe(gameID);
+//        return String.format("Observing game with ID: %s", gameID);
+//    }
+//
+//    public String logout() throws ResponseException {
+//        assertSignedIn();
+//        server.logout();
+//        state = State.SIGNEDOUT;
+//        return String.format("%s logged out", username);
+//    }
 
     public String help() {
         if (state == State.SIGNEDOUT) {

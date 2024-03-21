@@ -8,11 +8,9 @@ import java.util.Scanner;
 public class Repl {
     private final ChessClient client;
 
-    private final ChessBoard chessBoard;
 
     public Repl(String serverUrl) {
         client = new ChessClient(serverUrl, this);
-        chessBoard = new ChessBoard();
     }
 
     public void run() {

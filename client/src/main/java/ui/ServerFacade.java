@@ -2,7 +2,9 @@ package ui;
 
 import com.google.gson.Gson;
 import exception.ResponseException;
+import requests.LoginRequest;
 import requests.RegisterRequest;
+import response.LoginResponse;
 import response.RegisterResponse;
 
 import java.io.IOException;
@@ -81,27 +83,30 @@ public class ServerFacade {
         authToken = response.getAuthToken();
     }
 
-    public void login(String username) {
-
+    public void login(String username, String password) throws ResponseException {
+        LoginResponse response = this.makeRequest("POST", "/session",
+                new LoginRequest(username, password), LoginResponse.class);
+        authToken = response.getAuthToken();
     }
 
-    public void logout() {
-
-    }
-
-    public void create(String gameName) {
-
-    }
-
-    public void list() {
-
-    }
-
-    public void join(String id) {
-
-    }
-
-    public void observe(String gameID) {
-
-    }
+//
+//    public void logout() {
+//
+//    }
+//
+//    public void create(String gameName) {
+//
+//    }
+//
+//    public void list() {
+//
+//    }
+//
+//    public void join(String id) {
+//
+//    }
+//
+//    public void observe(String gameID) {
+//
+//    }
 }
