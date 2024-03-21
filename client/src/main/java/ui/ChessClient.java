@@ -6,7 +6,11 @@ import java.util.Arrays;
 
 public class ChessClient {
 
-    private String visitorName = null;
+    private String username = null;
+    private String password = null;
+    private String email = null;
+    private String gameName = null;
+    private String gameID = null;
     private final ServerFacade server;
     private final String serverUrl;
     private State state = State.SIGNEDOUT;
@@ -31,7 +35,7 @@ public class ChessClient {
             else {
                 return switch (cmd) {
                     case "create <NAME>" -> create(params);
-                    case "list" -> list(params);
+                    case "list" -> list();
                     case "join <ID>" -> join(params);
                     case "observe <ID>" -> observe(params);
                     case "logout" -> logout();
@@ -47,62 +51,72 @@ public class ChessClient {
     public String register(String... params) throws ResponseException {
         if (params.length >= 1) {
             state = State.SIGNEDIN;
-            visitorName = String.join("-", params);
-            ws = new WebSocketFacade(serverUrl, notificationHandler);
-            ws.enterPetShop(visitorName);
-            return String.format("You registered as %s.", visitorName);
+            username = String.join("-", params);
+            password = ;//TODO
+            email = ;//TODO
+            server.register(username, password, email);
+            return String.format("You registered as %s.", username);
         }
-        throw new ResponseException(400, "Expected: <yourname>");
+        throw new ResponseException(400, "Failed to register");
     }
 
     public String login(String... params) throws ResponseException {
         if (params.length >= 1) {
             state = State.SIGNEDIN;
-            visitorName = String.join("-", params);
-            //TODO
-            return String.format("You logged in as %s.", visitorName);
+            username = String.join("-", params);
+            password = ;//TODO
+            server.login(username);
+            return String.format("You logged in as %s.", username);
         }
-        throw new ResponseException(400, ""); //TODO
-    }
-
-
-    public String logout() throws ResponseException {
-        assertSignedIn();
-        ws.leavePetShop(visitorName);
-        ws = null;
-        state = State.SIGNEDOUT;
-        return String.format("%s logged out", visitorName);
+        throw new ResponseException(400, "Failed to login");
     }
 
     public String create(String... params) throws ResponseException {
         assertSignedIn();
-        return null;
+        gameName = String.join("-", params);
+        server.create(gameName);
+        return String.format("Created game %s.", gameName);
     }
 
-    public String list(String... params) {
-        return null;
+    public String list() throws ResponseException {
+        assertSignedIn();
+        server.list();
+        return String.format("Game List:");//TODO
     }
 
-    public String join(String... params) {
-        return null;
+    public String join(String... params) throws ResponseException { //TODO [WHITE|BLACK|<empty>] ??
+        assertSignedIn();
+        gameID = String.join("-", params);
+        server.join(gameID);
+        return String.format("Joined game with ID: %s", gameID);
     }
 
-    public String observe(String... params) {
-        return null;
+    public String observe(String... params) throws ResponseException {
+        assertSignedIn();
+        gameID = String.join("-", params);
+        server.observe(gameID);
+        return String.format("Observing game with ID: %s", gameID);
+    }
+
+    public String logout() throws ResponseException {
+        assertSignedIn();
+        server.logout();
+        state = State.SIGNEDOUT;
+        return String.format("%s logged out", username);
     }
 
     public String help() {
         if (state == State.SIGNEDOUT) {
             return """
-                    - register
-                    - login <yourname>
+                    - register <USERNAME> <PASSWORD> <EMAIL>
+                    - login <USERNAME> <PASSWORD>
                     - quit
                     """;
         }
         return """
                 - create <NAME>
                 - list
-                - join <ID>
+                - join <ID> [WHITE|BLACK|<empty>]
                 - observe <ID>
                 - logout
                 - quit

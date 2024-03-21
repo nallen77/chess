@@ -70,4 +70,33 @@ public class ServerFacade {
     private boolean isSuccessful(int status) {
         return status / 100 == 2;
     }
+
+
+    public void register(String username, String password, String email) {
+
+    }
+
+    public void login(String username) {
+
+    }
+
+    public void logout() {
+
+    }
+
+    public void create(String gameName) {
+
+    }
+
+    public void list() {
+
+    }
+
+    public void join(String id) {
+
+    }
+
+    public void observe(String gameID) {
+
+    }
 }
