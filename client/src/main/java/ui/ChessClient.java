@@ -115,6 +115,7 @@ public class ChessClient {
                 int gameID = Integer.parseInt(params[0]);
                 String playerColor = params[1].toUpperCase();
                 server.join(gameID, playerColor);
+                //TODO draw the board
                 return String.format("Joined game %s as the %s player", gameID, playerColor);
             }
         } catch (ResponseException e) {
@@ -129,6 +130,7 @@ public class ChessClient {
                 assertSignedIn();
                 int gameID = Integer.parseInt(params[0]);
                 server.observe(gameID);
+                //TODO draw the board
                 return String.format("Observing game %d", gameID);
             }
         } catch (ResponseException e) {

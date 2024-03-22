@@ -117,4 +117,8 @@ public class ServerFacade {
         this.makeRequest("PUT", "/game",
                 new JoinGameRequest(null, authToken, gameID), JoinGameResponse.class);
     }
+
+    public void clear() throws ResponseException {
+        this.makeRequest("DELETE", "/db", null, null);
+    }
 }
