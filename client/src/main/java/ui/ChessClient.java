@@ -1,5 +1,6 @@
 package ui;
 
+import com.google.gson.Gson;
 import exception.ResponseException;
 
 import java.util.Arrays;
@@ -8,9 +9,6 @@ public class ChessClient {
 
     private String username = null;
     private String password = null;
-    private String email = null;
-    private String gameName = null;
-    private String gameID = null;
     private final ServerFacade server;
     private final String serverUrl;
     private State state = State.SIGNEDOUT;
@@ -34,11 +32,11 @@ public class ChessClient {
             }
             else {
                 return switch (cmd) {
-//                    case "create <NAME>" -> create(params);
-//                    case "list" -> list();
-//                    case "join <ID>" -> join(params);
-//                    case "observe <ID>" -> observe(params);
-//                    case "logout" -> logout();
+                    case "create" -> create(params);
+                    case "list" -> list();
+                    case "join" -> join(params);
+                    case "observe" -> observe(params);
+                    case "logout" -> logout();
                     case "quit" -> "quit";
                     default -> help();
                 };
@@ -54,7 +52,7 @@ public class ChessClient {
                 state = State.SIGNEDIN;
                 username = params[0];
                 password = params[1];
-                email = params[2];
+                String email = params[2];
                 server.register(username, password, email);
                 return String.format("You registered as %s.", username);
             }
@@ -79,40 +77,76 @@ public class ChessClient {
         }
         return "Login error: incorrect usage";
     }
-//
-//    public String create(String... params) throws ResponseException {
-//        assertSignedIn();
-//        gameName = String.join("-", params);
-//        server.create(gameName);
-//        return String.format("Created game %s.", gameName);
-//    }
-//
-//    public String list() throws ResponseException {
-//        assertSignedIn();
-//        server.list();
-//        return "Game List:";//TODO what should this return?
-//    }
-//
-//    public String join(String... params) throws ResponseException { //TODO [WHITE|BLACK|<empty>] ??
-//        assertSignedIn();
-//        gameID = String.join("-", params);
-//        server.join(gameID);
-//        return String.format("Joined game with ID: %s", gameID);
-//    }
-//
-//    public String observe(String... params) throws ResponseException {
-//        assertSignedIn();
-//        gameID = String.join("-", params);
-//        server.observe(gameID);
-//        return String.format("Observing game with ID: %s", gameID);
-//    }
-//
-//    public String logout() throws ResponseException {
-//        assertSignedIn();
-//        server.logout();
-//        state = State.SIGNEDOUT;
-//        return String.format("%s logged out", username);
-//    }
+
+    public String create(String... params) throws ResponseException {
+        try {
+            if (params.length == 1) {
+                assertSignedIn();
+                String gameName = params[0];
+                server.create(gameName);
+                return String.format("Created game %s.", gameName);
+            }
+        } catch (ResponseException e) {
+            return "Create Game error: " + e.getMessage();
+        }
+        return "Create Game error: incorrect usage";
+    }
+
+    public String list() throws ResponseException {
+        try {
+            assertSignedIn();
+            var chessGames = server.list();
+            var result = new StringBuilder();
+            var gson = new Gson();
+            for (var game : chessGames) {
+                result.append(gson.toJson(game)).append('\n');
+            }
+            return result.toString();
+        } catch (ResponseException e) {
+            return "List Games error exception: " + e.getMessage();
+        }
+    }
+
+
+    public String join(String... params) throws ResponseException {
+        try {
+            if (params.length == 2) {
+                assertSignedIn();
+                int gameID = Integer.parseInt(params[0]);
+                String playerColor = params[1].toUpperCase();
+                server.join(gameID, playerColor);
+                return String.format("Joined game %s as the %s player", gameID, playerColor);
+            }
+        } catch (ResponseException e) {
+            return "Join Game error exception: " + e.getMessage();
+        }
+        return "Join Game error: incorrect usage";
+    }
+
+    public String observe(String... params) throws ResponseException {
+        try {
+            if (params.length == 1) {
+                assertSignedIn();
+                int gameID = Integer.parseInt(params[0]);
+                server.observe(gameID);
+                return String.format("Observing game %d", gameID);
+            }
+        } catch (ResponseException e) {
+            return "Observe Game error exception: " + e.getMessage();
+        }
+        return "Observe Game error: incorrect usage";
+    }
+
+    public String logout() throws ResponseException {
+        try {
+            assertSignedIn();
+            server.logout();
+            state = State.SIGNEDOUT;
+            return String.format("%s logged out", username);
+        } catch (ResponseException e) {
+            return "Logout error exception: " + e.getMessage();
+        }
+    }
 
     public String help() {
         if (state == State.SIGNEDOUT) {

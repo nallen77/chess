@@ -11,4 +11,8 @@ public class ListGamesResponse {
     public ListGamesResponse(Collection<GameData> games) {
         this.games = games;
     }
+
+    public Collection<GameData> getGames() {
+        return games;
+    }
 }
