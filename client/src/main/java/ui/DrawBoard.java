@@ -6,7 +6,7 @@ import java.nio.charset.StandardCharsets;
 import static ui.EscapeSequences.*;
 
 public class DrawBoard {
-    private PrintStream out;
+    private final PrintStream out;
 
     public DrawBoard() {
         out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
@@ -34,8 +34,8 @@ public class DrawBoard {
         }
 
         // Setting up black pieces
-        board[6] = new String[]{beforeSpacing + "p" + afterSpacing, beforeSpacing + "p" + afterSpacing, beforeSpacing + "p" + afterSpacing, beforeSpacing + "p" + afterSpacing, beforeSpacing + "p" + afterSpacing, beforeSpacing + "p" + afterSpacing, beforeSpacing + "p" + afterSpacing, beforeSpacing + "p" + afterSpacing};
-        board[7] = new String[]{beforeSpacing + "r" + afterSpacing, beforeSpacing + "n" + afterSpacing, beforeSpacing + "b" + afterSpacing, beforeSpacing + "q" + afterSpacing, beforeSpacing + "k" + afterSpacing, beforeSpacing + "b" + afterSpacing, beforeSpacing + "n" + afterSpacing, beforeSpacing + "r" + afterSpacing};
+        board[6] = new String[]{beforeSpacing + "P" + afterSpacing, beforeSpacing + "P" + afterSpacing, beforeSpacing + "P" + afterSpacing, beforeSpacing + "P" + afterSpacing, beforeSpacing + "P" + afterSpacing, beforeSpacing + "P" + afterSpacing, beforeSpacing + "P" + afterSpacing, beforeSpacing + "P" + afterSpacing};
+        board[7] = new String[]{beforeSpacing + "R" + afterSpacing, beforeSpacing + "N" + afterSpacing, beforeSpacing + "B" + afterSpacing, beforeSpacing + "Q" + afterSpacing, beforeSpacing + "K" + afterSpacing, beforeSpacing + "B" + afterSpacing, beforeSpacing + "N" + afterSpacing, beforeSpacing + "R" + afterSpacing};
 
         return board;
     }
@@ -43,12 +43,11 @@ public class DrawBoard {
     private void printChessBoard(String[][] board, boolean isWhiteView) {
         String spacing = "\u2001\u2005\u2006";
         String[] numbers = isWhiteView ? new String[]{"1" + spacing, "2" + spacing, "3" + spacing, "4" + spacing, "5" + spacing, "6" + spacing, "7" + spacing, "8" + spacing} : new String[]{"8" + spacing, "7" + spacing, "6" + spacing, "5" + spacing, "4" + spacing, "3" + spacing, "2" + spacing, "1" + spacing};
-        String[] fileLetters = isWhiteView ? new String[]{"a", "b", "c", "d", "e", "f", "g", "h"} : new String[]{"h", "g", "f", "e", "d", "c", "b", "a"};
 
         row(isWhiteView);
         for (int i = 0; i < 8; i++) {
             out.print(SET_BG_COLOR_BLACK + EMPTY);
-            out.print(SET_BG_COLOR_LIGHT_GREY + numbers[i]);
+            out.print(SET_BG_COLOR_YELLOW + numbers[i]);
             for (int j = 0; j < 8; j++) {
                 boolean isWhiteSquare = (i + j) % 2 == 0;
                 out.print(isWhiteSquare ? SET_BG_COLOR_WHITE : SET_BG_COLOR_BLACK);
@@ -69,7 +68,7 @@ public class DrawBoard {
                 out.print(piece);
             }
             out.print(SET_TEXT_COLOR_BLACK);
-            out.print(SET_BG_COLOR_LIGHT_GREY + numbers[i]);
+            out.print(SET_BG_COLOR_YELLOW + numbers[i]);
             out.print(SET_BG_COLOR_BLACK + EMPTY);
             out.print("\n");
         }
@@ -83,10 +82,10 @@ public class DrawBoard {
     private void row(boolean isWhiteView) {
         out.print("   ");
 
-        out.print(SET_BG_COLOR_LIGHT_GREY);
+        out.print(SET_BG_COLOR_YELLOW);
         out.print(SET_TEXT_COLOR_BLACK);
         String spacing = "\u2001\u2005\u2006";
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + spacing + "  ");
+        System.out.print(SET_BG_COLOR_YELLOW + spacing + "  ");
         String[] fileLetters = isWhiteView ? new String[]{"a" + spacing, "b"+ spacing, "c"+ spacing, "d"+ spacing, "e"+ spacing, "f"+ spacing, "g"+ spacing, "h"+ spacing} : new String[]{"h"+ spacing, "g"+ spacing, "f"+ spacing, "e"+ spacing, "d"+ spacing, "c"+ spacing, "b"+ spacing, "a"+ spacing};
         for (String letter : fileLetters) {
             out.print(letter);

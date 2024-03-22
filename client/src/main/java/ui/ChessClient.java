@@ -11,11 +11,9 @@ public class ChessClient {
     private String password = null;
     private final ServerFacade server;
     private DrawBoard board;
-    private final String serverUrl;
     private State state = State.SIGNEDOUT;
-    public ChessClient(String serverUrl, Repl repl) {
+    public ChessClient(String serverUrl) {
         server = new ServerFacade(serverUrl);
-        this.serverUrl = serverUrl;
         this.board = new DrawBoard();
     }
 
@@ -43,7 +41,8 @@ public class ChessClient {
                     default -> help();
                 };
             }
-        } catch (ResponseException ex) {
+        }
+        catch (ResponseException ex) {
             return ex.getMessage();
         }
     }
@@ -58,7 +57,8 @@ public class ChessClient {
                 server.register(username, password, email);
                 return String.format("You registered as %s.", username);
             }
-        } catch (ResponseException e) {
+        }
+        catch (ResponseException e) {
             return "Register error exception: " + e.getMessage();
         }
         return "Register error: incorrect usage";
@@ -88,7 +88,8 @@ public class ChessClient {
                 server.create(gameName);
                 return String.format("Created game %s.", gameName);
             }
-        } catch (ResponseException e) {
+        }
+        catch (ResponseException e) {
             return "Create Game error: " + e.getMessage();
         }
         return "Create Game error: incorrect usage";
@@ -104,7 +105,8 @@ public class ChessClient {
                 result.append(gson.toJson(game)).append('\n');
             }
             return result.toString();
-        } catch (ResponseException e) {
+        }
+        catch (ResponseException e) {
             return "List Games error exception: " + e.getMessage();
         }
     }
@@ -117,11 +119,11 @@ public class ChessClient {
                 int gameID = Integer.parseInt(params[0]);
                 String playerColor = params[1].toUpperCase();
                 server.join(gameID, playerColor);
-                //TODO draw the board
                 board.setup();
                 return String.format("Joined game %s as the %s player", gameID, playerColor);
             }
-        } catch (ResponseException e) {
+        }
+        catch (ResponseException e) {
             return "Join Game error exception: " + e.getMessage();
         }
         return "Join Game error: incorrect usage";
@@ -133,11 +135,11 @@ public class ChessClient {
                 assertSignedIn();
                 int gameID = Integer.parseInt(params[0]);
                 server.observe(gameID);
-                //TODO draw the board
                 board.setup();
                 return String.format("Observing game %d", gameID);
             }
-        } catch (ResponseException e) {
+        }
+        catch (ResponseException e) {
             return "Observe Game error exception: " + e.getMessage();
         }
         return "Observe Game error: incorrect usage";
@@ -149,7 +151,8 @@ public class ChessClient {
             server.logout();
             state = State.SIGNEDOUT;
             return String.format("%s logged out", username);
-        } catch (ResponseException e) {
+        }
+        catch (ResponseException e) {
             return "Logout error exception: " + e.getMessage();
         }
     }

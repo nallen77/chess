@@ -1,7 +1,5 @@
 package ui;
 
-import chess.ChessBoard;
-
 import java.util.Scanner;
 
 
@@ -10,7 +8,7 @@ public class Repl {
 
 
     public Repl(String serverUrl) {
-        client = new ChessClient(serverUrl, this);
+        client = new ChessClient(serverUrl);
     }
 
     public void run() {
