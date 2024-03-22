@@ -139,4 +139,9 @@ public class ServerFacadeTests {
         facade.create("ObserveTestGame2");
         assertThrows(ResponseException.class, () -> facade.observe(7));
     }
+
+    @Test
+    public void clear_Valid() {
+        assertDoesNotThrow(() -> facade.clear());
+    }
 }
