@@ -10,11 +10,13 @@ public class ChessClient {
     private String username = null;
     private String password = null;
     private final ServerFacade server;
+    private DrawBoard board;
     private final String serverUrl;
     private State state = State.SIGNEDOUT;
     public ChessClient(String serverUrl, Repl repl) {
         server = new ServerFacade(serverUrl);
         this.serverUrl = serverUrl;
+        this.board = new DrawBoard();
     }
 
     public String eval(String line) {
@@ -116,6 +118,7 @@ public class ChessClient {
                 String playerColor = params[1].toUpperCase();
                 server.join(gameID, playerColor);
                 //TODO draw the board
+                board.setup();
                 return String.format("Joined game %s as the %s player", gameID, playerColor);
             }
         } catch (ResponseException e) {
@@ -131,6 +134,7 @@ public class ChessClient {
                 int gameID = Integer.parseInt(params[0]);
                 server.observe(gameID);
                 //TODO draw the board
+                board.setup();
                 return String.format("Observing game %d", gameID);
             }
         } catch (ResponseException e) {
