@@ -15,10 +15,6 @@ public class GameData {
         return game;
     }
 
-    public void setGame(ChessGame game) {
-        this.game = game;
-    }
-
     public GameData(int gameID, String whiteUsername, String blackUsername, String gameName, ChessGame game) {
         this.gameID = gameID;
         this.whiteUsername = whiteUsername;
